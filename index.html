@@ -50,24 +50,147 @@
             justify-content: center;
         }
 
-        .cover-box {
+        /* ПЛАСТИНКА */
+        .vinyl-container {
+            position: relative;
             width: 300px;
             height: 300px;
-            border: 3px solid #333;
         }
-        .cover-box img { width: 100%; height: 100%; object-fit: cover; }
+        .vinyl {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: 
+                radial-gradient(circle at center, #000 0%, #000 15%, transparent 15%),
+                radial-gradient(circle at center, #333 15%, #111 16%, #333 17%, #111 18%, #333 19%, #111 20%, #333 21%, #111 22%, #333 23%, #111 24%, #333 25%, #111 26%, #333 27%, #111 28%, #333 29%, #111 30%, #333 31%, #111 32%, #333 33%, #111 34%, #333 35%, #111 36%, #333 37%, #111 38%, #333 39%, #111 40%, #333 41%, #111 42%, #333 43%, #111 44%, #333 45%, #111 46%, #333 47%, #111 48%, #333 49%, #111 50%, #333 51%, #111 52%, #333 53%, #111 54%, #333 55%, #111 56%, #333 57%, #111 58%, #333 59%, #111 60%, #333 61%, #111 62%, #333 63%, #111 64%, #333 65%, #111 66%, #333 67%, #111 68%, #333 69%, #111 70%, #333 71%, #111 72%, #333 73%, #111 74%, #333 75%, #111 76%, #333 77%, #111 78%, #333 79%, #111 80%, #333 81%, #111 82%, #333 83%, #111 84%, #333 85%, #111 86%, #333 87%, #111 88%, #333 89%, #111 90%, #333 91%, #111 92%, #333 93%, #111 94%, #333 95%, #111 96%, #333 97%, #111 98%, #333 99%, #111 100%);
+            border: 3px solid #333;
+            position: relative;
+            transition: transform 0.3s;
+        }
+        .vinyl.playing {
+            animation: spin 3s linear infinite;
+        }
+        .vinyl-cover {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 2px solid #000;
+        }
+        .vinyl-cover img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .vinyl-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 20px;
+            height: 20px;
+            background: #000;
+            border-radius: 50%;
+            border: 2px solid #333;
+            z-index: 10;
+        }
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
 
+        /* КАСТОМНЫЙ ПЛЕЕР */
         .player-controls { flex: 1; min-width: 300px; }
         
-        audio {
-            width: 100%;
+        .controls-row {
+            display: flex;
+            align-items: center;
+            gap: 20px;
             margin-bottom: 20px;
-            filter: grayscale(100%);
+        }
+        
+        .play-btn {
+            width: 60px;
+            height: 60px;
+            background: #fff;
+            color: #000;
+            border: none;
+            cursor: pointer;
+            font-size: 1.5rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+        .play-btn:hover {
+            background: #ccc;
+            transform: scale(1.05);
+        }
+        .play-btn:active {
+            transform: scale(0.95);
+        }
+        
+        .time-display {
+            font-size: 0.9rem;
+            color: #888;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .progress-container {
+            width: 100%;
+            height: 8px;
+            background: #333;
+            cursor: pointer;
+            margin-bottom: 20px;
+            position: relative;
+        }
+        .progress-bar {
+            height: 100%;
+            background: #fff;
+            width: 0%;
+            transition: width 0.1s;
+        }
+        .progress-container:hover .progress-bar {
+            background: #ccc;
+        }
+        
+        /* ЭКВАЛАЙЗЕР */
+        .equalizer {
+            width: 100%;
+            height: 80px;
+            background: #000;
+            border: 2px solid #333;
+            margin-bottom: 20px;
+        }
+        
+        .volume-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        .volume-slider {
+            flex: 1;
+            height: 4px;
+            background: #333;
+            cursor: pointer;
+            position: relative;
+        }
+        .volume-bar {
+            height: 100%;
+            background: #fff;
+            width: 70%;
         }
 
         .stats {
             display: flex;
             gap: 15px;
+            margin-top: 20px;
         }
         .stat {
             background: #000;
@@ -129,6 +252,11 @@
             border-top: 2px solid #333;
             padding-top: 30px;
         }
+
+        @media (max-width: 768px) {
+            .title { font-size: 2.5rem; letter-spacing: 8px; }
+            .vinyl-container { width: 250px; height: 250px; }
+        }
     </style>
 </head>
 <body>
@@ -140,14 +268,42 @@
         </header>
 
         <div class="player-box">
-            <div class="cover-box">
-                <img src="cover.png" alt="Обложка">
+            <!-- ПЛАСТИНКА -->
+            <div class="vinyl-container">
+                <div class="vinyl" id="vinyl">
+                    <div class="vinyl-cover">
+                        <img src="cover.png" alt="Обложка">
+                    </div>
+                    <div class="vinyl-center"></div>
+                </div>
             </div>
+
+            <!-- КАСТОМНЫЙ ПЛЕЕР -->
             <div class="player-controls">
-                <audio controls>
-                    <source src="rayony.m4a" type="audio/mp4">
-                    Ваш браузер не поддерживает аудио.
-                </audio>
+                <!-- ЭКВАЛАЙЗЕР -->
+                <canvas class="equalizer" id="equalizer"></canvas>
+                
+                <!-- ПРОГРЕСС-БАР -->
+                <div class="progress-container" id="progressContainer">
+                    <div class="progress-bar" id="progressBar"></div>
+                </div>
+                
+                <!-- КНОПКИ -->
+                <div class="controls-row">
+                    <button class="play-btn" id="playBtn">▶</button>
+                    <div class="time-display">
+                        <span id="currentTime">0:00</span> / <span id="duration">0:00</span>
+                    </div>
+                </div>
+                
+                <!-- ГРОМКОСТЬ -->
+                <div class="volume-control">
+                    <span style="color: #888;">🔊</span>
+                    <div class="volume-slider" id="volumeSlider">
+                        <div class="volume-bar" id="volumeBar"></div>
+                    </div>
+                </div>
+
                 <div class="stats">
                     <div class="stat"><strong>2:55</strong><span>Длительность</span></div>
                     <div class="stat"><strong>75</strong><span>BPM</span></div>
@@ -155,6 +311,11 @@
                 </div>
             </div>
         </div>
+
+        <!-- СКРЫТЫЙ АУДИО ЭЛЕМЕНТ -->
+        <audio id="audio" crossorigin="anonymous">
+            <source src="rayony.m4a" type="audio/mp4">
+        </audio>
 
         <section>
             <h2>О композиции</h2>
@@ -191,5 +352,129 @@
             <p>© 2026 Кирилл Корчагин. Все права защищены.</p>
         </footer>
     </div>
+
+    <script>
+        const audio = document.getElementById('audio');
+        const playBtn = document.getElementById('playBtn');
+        const vinyl = document.getElementById('vinyl');
+        const progressBar = document.getElementById('progressBar');
+        const progressContainer = document.getElementById('progressContainer');
+        const currentTimeEl = document.getElementById('currentTime');
+        const durationEl = document.getElementById('duration');
+        const volumeSlider = document.getElementById('volumeSlider');
+        const volumeBar = document.getElementById('volumeBar');
+        const canvas = document.getElementById('equalizer');
+        const ctx = canvas.getContext('2d');
+
+        // Настройка canvas
+        canvas.width = canvas.offsetWidth;
+        canvas.height = canvas.offsetHeight;
+
+        // Web Audio API для эквалайзера
+        let audioContext, analyser, source;
+        let isAudioContextSetup = false;
+
+        function setupAudioContext() {
+            if (isAudioContextSetup) return;
+            
+            try {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                analyser = audioContext.createAnalyser();
+                source = audioContext.createMediaElementSource(audio);
+                source.connect(analyser);
+                analyser.connect(audioContext.destination);
+                analyser.fftSize = 64;
+                isAudioContextSetup = true;
+            } catch (e) {
+                console.log('AudioContext не поддерживается');
+            }
+        }
+
+        // Play/Pause
+        playBtn.addEventListener('click', () => {
+            setupAudioContext();
+            
+            if (audio.paused) {
+                audio.play();
+                playBtn.textContent = '⏸';
+                vinyl.classList.add('playing');
+            } else {
+                audio.pause();
+                playBtn.textContent = '▶';
+                vinyl.classList.remove('playing');
+            }
+        });
+
+        // Обновление прогресса
+        audio.addEventListener('timeupdate', () => {
+            const progress = (audio.currentTime / audio.duration) * 100;
+            progressBar.style.width = progress + '%';
+            currentTimeEl.textContent = formatTime(audio.currentTime);
+        });
+
+        // Длительность
+        audio.addEventListener('loadedmetadata', () => {
+            durationEl.textContent = formatTime(audio.duration);
+        });
+
+        // Клик по прогресс-бару
+        progressContainer.addEventListener('click', (e) => {
+            const rect = progressContainer.getBoundingClientRect();
+            const pos = (e.clientX - rect.left) / rect.width;
+            audio.currentTime = pos * audio.duration;
+        });
+
+        // Громкость
+        volumeSlider.addEventListener('click', (e) => {
+            const rect = volumeSlider.getBoundingClientRect();
+            const pos = (e.clientX - rect.left) / rect.width;
+            audio.volume = pos;
+            volumeBar.style.width = (pos * 100) + '%';
+        });
+
+        // Формат времени
+        function formatTime(seconds) {
+            if (isNaN(seconds)) return '0:00';
+            const mins = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60);
+            return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+        }
+
+        // Эквалайзер
+        function drawEqualizer() {
+            requestAnimationFrame(drawEqualizer);
+            
+            ctx.fillStyle = '#000';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            if (!analyser) return;
+
+            const bufferLength = analyser.frequencyBinCount;
+            const dataArray = new Uint8Array(bufferLength);
+            analyser.getByteFrequencyData(dataArray);
+
+            const barWidth = (canvas.width / bufferLength) * 2.5;
+            let barHeight;
+            let x = 0;
+
+            for (let i = 0; i < bufferLength; i++) {
+                barHeight = (dataArray[i] / 255) * canvas.height;
+
+                ctx.fillStyle = '#fff';
+                ctx.fillRect(x, canvas.height - barHeight, barWidth, barHeight);
+
+                x += barWidth + 1;
+            }
+        }
+
+        drawEqualizer();
+
+        // Конец трека
+        audio.addEventListener('ended', () => {
+            playBtn.textContent = '▶';
+            vinyl.classList.remove('playing');
+            progressBar.style.width = '0%';
+        });
+    </script>
 </body>
 </html>
