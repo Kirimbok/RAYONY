@@ -5,331 +5,435 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Кирилл Корчагин — РАЙОНЫ</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: 'Courier New', monospace;
-            background: #000;
-            color: #fff;
-            min-height: 100vh;
-            padding: 40px 20px;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
-        .container { max-width: 900px; margin: 0 auto; }
-        
-        .header { text-align: center; margin-bottom: 50px; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(180deg, #0a0a0a 0%, #1a1a1a 100%);
+            color: #e0e0e0;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* HEADER */
+        .header {
+            text-align: center;
+            padding: 40px 20px;
+            margin-bottom: 30px;
+        }
+
         .title {
-            font-size: 4rem;
+            font-size: clamp(2rem, 8vw, 3.5rem);
             font-weight: 900;
-            letter-spacing: 15px;
+            letter-spacing: 8px;
             color: #fff;
             text-transform: uppercase;
-            border: 3px solid #fff;
-            padding: 20px;
-            display: inline-block;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
+            word-break: break-word;
         }
-        .artist { font-size: 1.5rem; color: #888; margin-bottom: 15px; letter-spacing: 3px; }
+
+        .artist {
+            font-size: clamp(1rem, 4vw, 1.3rem);
+            color: #a0a0a0;
+            margin-bottom: 15px;
+        }
+
         .genre {
             display: inline-block;
-            padding: 10px 30px;
-            background: #fff;
-            color: #000;
-            font-weight: bold;
-            font-size: 0.9rem;
-            letter-spacing: 2px;
+            padding: 6px 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            font-size: 0.85rem;
+            color: #fff;
+            margin-bottom: 20px;
         }
 
-        .player-box {
-            background: #111;
-            border: 2px solid #333;
-            padding: 40px;
-            display: flex;
-            gap: 40px;
-            align-items: center;
-            margin-bottom: 40px;
-            flex-wrap: wrap;
-            justify-content: center;
+        /* PLAYER */
+        .player-section {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 30px;
+            backdrop-filter: blur(10px);
         }
 
-        /* ПЛАСТИНКА */
         .vinyl-container {
+            width: 250px;
+            height: 250px;
+            margin: 0 auto 25px;
             position: relative;
-            width: 300px;
-            height: 300px;
         }
+
         .vinyl {
             width: 100%;
             height: 100%;
             border-radius: 50%;
             background: 
-                radial-gradient(circle at center, #000 0%, #000 15%, transparent 15%),
-                radial-gradient(circle at center, #333 15%, #111 16%, #333 17%, #111 18%, #333 19%, #111 20%, #333 21%, #111 22%, #333 23%, #111 24%, #333 25%, #111 26%, #333 27%, #111 28%, #333 29%, #111 30%, #333 31%, #111 32%, #333 33%, #111 34%, #333 35%, #111 36%, #333 37%, #111 38%, #333 39%, #111 40%, #333 41%, #111 42%, #333 43%, #111 44%, #333 45%, #111 46%, #333 47%, #111 48%, #333 49%, #111 50%, #333 51%, #111 52%, #333 53%, #111 54%, #333 55%, #111 56%, #333 57%, #111 58%, #333 59%, #111 60%, #333 61%, #111 62%, #333 63%, #111 64%, #333 65%, #111 66%, #333 67%, #111 68%, #333 69%, #111 70%, #333 71%, #111 72%, #333 73%, #111 74%, #333 75%, #111 76%, #333 77%, #111 78%, #333 79%, #111 80%, #333 81%, #111 82%, #333 83%, #111 84%, #333 85%, #111 86%, #333 87%, #111 88%, #333 89%, #111 90%, #333 91%, #111 92%, #333 93%, #111 94%, #333 95%, #111 96%, #333 97%, #111 98%, #333 99%, #111 100%);
+                repeating-radial-gradient(
+                    circle at center,
+                    #1a1a1a 0px,
+                    #2a2a2a 2px,
+                    #1a1a1a 4px,
+                    #0a0a0a 6px
+                );
             border: 3px solid #333;
             position: relative;
-            transition: transform 0.3s;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
         }
+
         .vinyl.playing {
             animation: spin 3s linear infinite;
         }
+
         .vinyl-cover {
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 120px;
-            height: 120px;
+            width: 100px;
+            height: 100px;
             border-radius: 50%;
             overflow: hidden;
-            border: 2px solid #000;
+            border: 3px solid #000;
         }
+
         .vinyl-cover img {
             width: 100%;
             height: 100%;
             object-fit: cover;
         }
-        .vinyl-center {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 20px;
-            height: 20px;
-            background: #000;
-            border-radius: 50%;
-            border: 2px solid #333;
-            z-index: 10;
-        }
+
         @keyframes spin {
             from { transform: rotate(0deg); }
             to { transform: rotate(360deg); }
         }
 
-        /* КАСТОМНЫЙ ПЛЕЕР */
-        .player-controls { flex: 1; min-width: 300px; }
-        
-        .controls-row {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            margin-bottom: 20px;
-        }
-        
-        .play-btn {
-            width: 60px;
-            height: 60px;
-            background: #fff;
-            color: #000;
-            border: none;
-            cursor: pointer;
-            font-size: 1.5rem;
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.2s;
-        }
-        .play-btn:hover {
-            background: #ccc;
-            transform: scale(1.05);
-        }
-        .play-btn:active {
-            transform: scale(0.95);
-        }
-        
-        .time-display {
-            font-size: 0.9rem;
-            color: #888;
-            font-family: 'Courier New', monospace;
-        }
-        
-        .progress-container {
+        .player-controls {
             width: 100%;
-            height: 8px;
-            background: #333;
-            cursor: pointer;
-            margin-bottom: 20px;
-            position: relative;
         }
-        .progress-bar {
-            height: 100%;
-            background: #fff;
-            width: 0%;
-            transition: width 0.1s;
-        }
-        .progress-container:hover .progress-bar {
-            background: #ccc;
-        }
-        
-        /* ЭКВАЛАЙЗЕР */
-        .equalizer {
+
+        audio {
             width: 100%;
-            height: 80px;
-            background: #000;
-            border: 2px solid #333;
             margin-bottom: 20px;
-        }
-        
-        .volume-control {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-top: 15px;
-        }
-        .volume-slider {
-            flex: 1;
-            height: 4px;
-            background: #333;
-            cursor: pointer;
-            position: relative;
-        }
-        .volume-bar {
-            height: 100%;
-            background: #fff;
-            width: 70%;
+            border-radius: 8px;
         }
 
         .stats {
-            display: flex;
-            gap: 15px;
-            margin-top: 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+            gap: 12px;
         }
+
         .stat {
-            background: #000;
-            border: 2px solid #333;
-            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 15px 10px;
+            border-radius: 10px;
             text-align: center;
-            flex: 1;
         }
+
         .stat strong {
+            display: block;
+            font-size: 1.1rem;
+            color: #fff;
+            margin-bottom: 4px;
+        }
+
+        .stat span {
+            font-size: 0.75rem;
+            color: #888;
+        }
+
+        /* SECTIONS */
+        section {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 25px;
+        }
+
+        h2 {
+            color: #fff;
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid rgba(255,255,255,0.1);
+        }
+
+        .description p {
+            color: #c0c0c0;
+            font-size: 1rem;
+            line-height: 1.8;
+            margin-bottom: 15px;
+        }
+
+        /* LYRICS */
+        .lyrics {
+            font-size: 0.95rem;
+            line-height: 2;
+            color: #b0b0b0;
+        }
+
+        .lyrics p {
+            margin-bottom: 8px;
+            padding: 4px 0;
+        }
+
+        .lyrics strong {
+            color: #fff;
+            display: block;
+            margin: 20px 0 10px;
+        }
+
+        .lyrics br {
+            margin-bottom: 10px;
+        }
+
+        /* SPECS */
+        .specs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 15px;
+        }
+
+        .spec-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 20px 15px;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .spec-card strong {
             display: block;
             font-size: 1.3rem;
             color: #fff;
             margin-bottom: 5px;
         }
-        .stat span { font-size: 0.8rem; color: #666; }
 
-        section {
-            background: #111;
-            border: 2px solid #333;
-            padding: 30px;
-            margin-bottom: 30px;
+        .spec-card span {
+            font-size: 0.75rem;
+            color: #888;
         }
-        h2 {
+
+        /* CREDITS */
+        .credits-list {
+            list-style: none;
+        }
+
+        .credits-list li {
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .credits-list li:last-child {
+            border-bottom: none;
+        }
+
+        .credit-role {
+            color: #888;
+            flex: 1;
+            min-width: 150px;
+        }
+
+        .credit-name {
             color: #fff;
-            margin-bottom: 20px;
-            border-bottom: 2px solid #fff;
-            display: inline-block;
-            padding-bottom: 5px;
-            letter-spacing: 3px;
-            text-transform: uppercase;
+            text-align: right;
         }
-        .lyrics p { margin-bottom: 8px; line-height: 1.8; color: #ccc; }
-        .lyrics p:hover { color: #fff; }
 
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-            gap: 15px;
-        }
-        .card {
-            background: #000;
-            border: 2px solid #333;
-            padding: 20px;
-            text-align: center;
-        }
-        .card strong {
-            display: block;
-            font-size: 1.5rem;
-            color: #fff;
-            margin-bottom: 5px;
-        }
-        .card span { font-size: 0.8rem; color: #666; }
-
+        /* FOOTER */
         footer {
             text-align: center;
+            padding: 40px 20px;
             color: #666;
-            margin-top: 50px;
-            font-size: 0.9rem;
-            border-top: 2px solid #333;
-            padding-top: 30px;
+            font-size: 0.85rem;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            margin-top: 40px;
         }
 
-        @media (max-width: 768px) {
-            .title { font-size: 2.5rem; letter-spacing: 8px; }
-            .vinyl-container { width: 250px; height: 250px; }
+        /* MOBILE OPTIMIZATION */
+        @media (max-width: 600px) {
+            .container {
+                padding: 15px;
+            }
+
+            .header {
+                padding: 30px 15px;
+            }
+
+            .player-section,
+            section {
+                padding: 20px 15px;
+            }
+
+            .vinyl-container {
+                width: 200px;
+                height: 200px;
+            }
+
+            .vinyl-cover {
+                width: 80px;
+                height: 80px;
+            }
+
+            .stats {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .specs-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .credit-role,
+            .credit-name {
+                text-align: left;
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+            .specs-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* TABLET */
+        @media (min-width: 601px) and (max-width: 1024px) {
+            .container {
+                padding: 25px;
+            }
+
+            .stats {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .specs-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
+        <!-- Header -->
         <header class="header">
             <h1 class="title">РАЙОНЫ</h1>
             <p class="artist">Кирилл Корчагин</p>
-            <span class="genre">HIP-HOP</span>
+            <span class="genre">Hip-Hop</span>
         </header>
 
-        <div class="player-box">
-            <!-- ПЛАСТИНКА -->
+        <!-- Player -->
+        <div class="player-section">
             <div class="vinyl-container">
                 <div class="vinyl" id="vinyl">
                     <div class="vinyl-cover">
                         <img src="cover.png" alt="Обложка">
                     </div>
-                    <div class="vinyl-center"></div>
                 </div>
             </div>
-
-            <!-- КАСТОМНЫЙ ПЛЕЕР -->
+            
             <div class="player-controls">
-                <!-- ЭКВАЛАЙЗЕР -->
-                <canvas class="equalizer" id="equalizer"></canvas>
+                <audio id="audio" controls>
+                    <source src="rayony.m4a" type="audio/mp4">
+                    Ваш браузер не поддерживает аудио
+                </audio>
                 
-                <!-- ПРОГРЕСС-БАР -->
-                <div class="progress-container" id="progressContainer">
-                    <div class="progress-bar" id="progressBar"></div>
-                </div>
-                
-                <!-- КНОПКИ -->
-                <div class="controls-row">
-                    <button class="play-btn" id="playBtn">▶</button>
-                    <div class="time-display">
-                        <span id="currentTime">0:00</span> / <span id="duration">0:00</span>
-                    </div>
-                </div>
-                
-                <!-- ГРОМКОСТЬ -->
-                <div class="volume-control">
-                    <span style="color: #888;">🔊</span>
-                    <div class="volume-slider" id="volumeSlider">
-                        <div class="volume-bar" id="volumeBar"></div>
-                    </div>
-                </div>
-
                 <div class="stats">
-                    <div class="stat"><strong>2:55</strong><span>Длительность</span></div>
-                    <div class="stat"><strong>75</strong><span>BPM</span></div>
-                    <div class="stat"><strong>Bm</strong><span>Тональность</span></div>
+                    <div class="stat">
+                        <strong>2:55</strong>
+                        <span>Длительность</span>
+                    </div>
+                    <div class="stat">
+                        <strong>75</strong>
+                        <span>BPM</span>
+                    </div>
+                    <div class="stat">
+                        <strong>Bm</strong>
+                        <span>Тональность</span>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- СКРЫТЫЙ АУДИО ЭЛЕМЕНТ -->
-        <audio id="audio" crossorigin="anonymous">
-            <source src="rayony.m4a" type="audio/mp4">
-        </audio>
-
-        <section>
+        <!-- Description -->
+        <section class="description">
             <h2>О композиции</h2>
-            <p>«Районы» — трек о пространстве между домом и дорогой. Спокойное интро медленно набирает плотность, выходит в кульминацию на середине, а затем так же чисто уходит в тишину. Семьдесят пять ударов в минуту — не торопясь, но без пауз.</p>
+            <p>
+                «Районы» — трек о пространстве между домом и дорогой. Спокойное интро 
+                медленно набирает плотность, выходит в кульминацию на середине, 
+                а затем так же чисто уходит в тишину.
+            </p>
+            <p>
+                Семьдесят пять ударов в минуту — не торопясь, но без пауз. 
+                Как районы, в которых мы выросли: они не спешат, но всегда рядом.
+            </p>
         </section>
 
+        <!-- Lyrics -->
         <section>
-            <h2>Текст</h2>
+            <h2>Текст песни</h2>
             <div class="lyrics">
                 <p><strong>[Куплет 1]</strong></p>
                 <p>В тени бетонных стен, где свет не достаёт,</p>
                 <p>Тут каждый второй знает, как судьба бьёт.</p>
                 <p>Дым сигарет вперемешку с туманом,</p>
                 <p>Мы идём по краю, сыты обманом.</p>
+                <br>
+                <p>Холод по венам, взгляд ледяной,</p>
+                <p>Этот город забрал мой покой.</p>
+                <p>Скрежет металла, эхо шагов,</p>
+                <p>Здесь выживает лишь тот, кто готов.</p>
+                <br>
+                <p>Крутятся колёса, время бежит,</p>
+                <p>Но мой район всё так же молчит.</p>
+                <p>Чувствуешь дрожь — это бас или страх?</p>
+                <p>Вся наша жизнь — это пыль на руках.</p>
+                <br>
+                <p>Сгущаются тучи, пора делать ход,</p>
+                <p>Смотри, как эта тьма идёт!</p>
+                <br>
+                <p><strong>[Припев]</strong></p>
+                <p>Это тёмный район, тут свои законы,</p>
+                <p>Каждый шаг — риск, мимо летят патроны.</p>
+                <p>Мы не просим пощады, мы берём своё,</p>
+                <p>Тьма укрывает нас — это наше бытиё.</p>
+                <br>
+                <p>Это тёмный район, тут свои законы,</p>
+                <p>Каждый шаг — риск, мимо летят патроны.</p>
+                <p>Мы не просим пощады, мы берём своё,</p>
+                <p>Тьма укрывает нас — это наше бытиё.</p>
+                <br>
+                <p><strong>[Куплет 2]</strong></p>
+                <p>Фонари горят тускло, как чьи-то надежды,</p>
+                <p>Мы прячем глаза под капюшоны одежды.</p>
+                <p>Тут фальшь не прощают, тут видят насквозь,</p>
+                <p>Столько судеб разбилось, столько жизней врозь.</p>
+                <br>
+                <p>Но мы держим строй, мы стоим до конца,</p>
+                <p>Нет страха в глазах, нет дрожи с лица.</p>
+                <p>Это дым и закон, наш вечный туман,</p>
+                <p>Город грехов и сплошной обман.</p>
+                <br>
+                <p>Слышишь этот шёпот? Он зовёт нас во тьму,</p>
+                <p>Я не верю словам, я не верю ничему.</p>
+                <p>Только то, что внутри, только то, что моё,</p>
+                <p>Скоро этот огонь поглотит всё!</p>
                 <br>
                 <p><strong>[Припев]</strong></p>
                 <p>Это тёмный район, тут свои законы,</p>
@@ -339,15 +443,61 @@
             </div>
         </section>
 
+        <!-- Specs -->
         <section>
-            <h2>Характеристики</h2>
-            <div class="grid">
-                <div class="card"><strong>-14</strong><span>LUFS</span></div>
-                <div class="card"><strong>48k</strong><span>Sample Rate</span></div>
-                <div class="card"><strong>256</strong><span>kbps</span></div>
+            <h2>Технические характеристики</h2>
+            <div class="specs-grid">
+                <div class="spec-card">
+                    <strong>2:55</strong>
+                    <span>Длительность</span>
+                </div>
+                <div class="spec-card">
+                    <strong>75</strong>
+                    <span>BPM</span>
+                </div>
+                <div class="spec-card">
+                    <strong>Bm</strong>
+                    <span>Тональность</span>
+                </div>
+                <div class="spec-card">
+                    <strong>-14</strong>
+                    <span>LUFS</span>
+                </div>
+                <div class="spec-card">
+                    <strong>48k</strong>
+                    <span>Sample Rate</span>
+                </div>
+                <div class="spec-card">
+                    <strong>256</strong>
+                    <span>kbps AAC</span>
+                </div>
             </div>
         </section>
 
+        <!-- Credits -->
+        <section>
+            <h2>Кредиты</h2>
+            <ul class="credits-list">
+                <li>
+                    <span class="credit-role">Автор текста</span>
+                    <span class="credit-name">Кирилл Корчагин</span>
+                </li>
+                <li>
+                    <span class="credit-role">Композитор</span>
+                    <span class="credit-name">Кирилл Корчагин</span>
+                </li>
+                <li>
+                    <span class="credit-role">Продакшн</span>
+                    <span class="credit-name">Кирилл Корчагин</span>
+                </li>
+                <li>
+                    <span class="credit-role">Мастеринг</span>
+                    <span class="credit-name">two-pass loudnorm, -14 LUFS, -1.5 dBTP</span>
+                </li>
+            </ul>
+        </section>
+
+        <!-- Footer -->
         <footer>
             <p>© 2026 Кирилл Корчагин. Все права защищены.</p>
         </footer>
@@ -355,125 +505,18 @@
 
     <script>
         const audio = document.getElementById('audio');
-        const playBtn = document.getElementById('playBtn');
         const vinyl = document.getElementById('vinyl');
-        const progressBar = document.getElementById('progressBar');
-        const progressContainer = document.getElementById('progressContainer');
-        const currentTimeEl = document.getElementById('currentTime');
-        const durationEl = document.getElementById('duration');
-        const volumeSlider = document.getElementById('volumeSlider');
-        const volumeBar = document.getElementById('volumeBar');
-        const canvas = document.getElementById('equalizer');
-        const ctx = canvas.getContext('2d');
 
-        // Настройка canvas
-        canvas.width = canvas.offsetWidth;
-        canvas.height = canvas.offsetHeight;
-
-        // Web Audio API для эквалайзера
-        let audioContext, analyser, source;
-        let isAudioContextSetup = false;
-
-        function setupAudioContext() {
-            if (isAudioContextSetup) return;
-            
-            try {
-                audioContext = new (window.AudioContext || window.webkitAudioContext)();
-                analyser = audioContext.createAnalyser();
-                source = audioContext.createMediaElementSource(audio);
-                source.connect(analyser);
-                analyser.connect(audioContext.destination);
-                analyser.fftSize = 64;
-                isAudioContextSetup = true;
-            } catch (e) {
-                console.log('AudioContext не поддерживается');
-            }
-        }
-
-        // Play/Pause
-        playBtn.addEventListener('click', () => {
-            setupAudioContext();
-            
-            if (audio.paused) {
-                audio.play();
-                playBtn.textContent = '⏸';
-                vinyl.classList.add('playing');
-            } else {
-                audio.pause();
-                playBtn.textContent = '▶';
-                vinyl.classList.remove('playing');
-            }
+        audio.addEventListener('play', () => {
+            vinyl.classList.add('playing');
         });
 
-        // Обновление прогресса
-        audio.addEventListener('timeupdate', () => {
-            const progress = (audio.currentTime / audio.duration) * 100;
-            progressBar.style.width = progress + '%';
-            currentTimeEl.textContent = formatTime(audio.currentTime);
-        });
-
-        // Длительность
-        audio.addEventListener('loadedmetadata', () => {
-            durationEl.textContent = formatTime(audio.duration);
-        });
-
-        // Клик по прогресс-бару
-        progressContainer.addEventListener('click', (e) => {
-            const rect = progressContainer.getBoundingClientRect();
-            const pos = (e.clientX - rect.left) / rect.width;
-            audio.currentTime = pos * audio.duration;
-        });
-
-        // Громкость
-        volumeSlider.addEventListener('click', (e) => {
-            const rect = volumeSlider.getBoundingClientRect();
-            const pos = (e.clientX - rect.left) / rect.width;
-            audio.volume = pos;
-            volumeBar.style.width = (pos * 100) + '%';
-        });
-
-        // Формат времени
-        function formatTime(seconds) {
-            if (isNaN(seconds)) return '0:00';
-            const mins = Math.floor(seconds / 60);
-            const secs = Math.floor(seconds % 60);
-            return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
-        }
-
-        // Эквалайзер
-        function drawEqualizer() {
-            requestAnimationFrame(drawEqualizer);
-            
-            ctx.fillStyle = '#000';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-            if (!analyser) return;
-
-            const bufferLength = analyser.frequencyBinCount;
-            const dataArray = new Uint8Array(bufferLength);
-            analyser.getByteFrequencyData(dataArray);
-
-            const barWidth = (canvas.width / bufferLength) * 2.5;
-            let barHeight;
-            let x = 0;
-
-            for (let i = 0; i < bufferLength; i++) {
-                barHeight = (dataArray[i] / 255) * canvas.height;
-
-                ctx.fillStyle = '#fff';
-                ctx.fillRect(x, canvas.height - barHeight, barWidth, barHeight);
-
-                x += barWidth + 1;
-            }
-        }
-
-        drawEqualizer();
-
-        // Конец трека
-        audio.addEventListener('ended', () => {
-            playBtn.textContent = '▶';
+        audio.addEventListener('pause', () => {
             vinyl.classList.remove('playing');
-            progressBar.style.width = '0%';
+        });
+
+        audio.addEventListener('ended', () => {
+            vinyl.classList.remove('playing');
         });
     </script>
 </body>
