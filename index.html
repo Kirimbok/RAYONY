@@ -476,7 +476,7 @@
     <h1>ТЁМНЫЙ РАЙОН</h1>
     <div class="subtitle">// PROTOCOL_X_ZERO</div>
 
-    <!-- Кастомный плеер -->
+    <!-- Кастомный плеер (ОДИН) -->
     <div class="player-box">
         <div class="player-info">
             <div class="player-track-name">ТЁМНЫЙ РАЙОН</div>
@@ -490,14 +490,14 @@
         <div class="player-controls">
             <button class="ctrl-btn" id="rewindBtn">⏮</button>
             <button class="ctrl-btn play-btn" id="playBtn">▶</button>
-            <button class="ctrl-btn" id="forwardBtn">⏭</button>
+            <button class="ctrl-btn" id="forwardBtn"></button>
             <div class="volume-container">
                 <input type="range" class="volume-slider" id="volumeSlider" min="0" max="1" step="0.01" value="1">
             </div>
         </div>
     </div>
 
-    <!-- Аудио элемент -->
+    <!-- Аудио (ОДИН ТРЕК) -->
     <audio id="audioPlayer" preload="metadata">
         <source src="rayony_master.m4a" type="audio/mp4">
         <source src="rayony_master.mp3" type="audio/mpeg">
@@ -675,7 +675,7 @@
         return m + ':' + (sec < 10 ? '0' : '') + sec;
     }
 
-    // ПЛЕЕР
+    // ОДИН ПЛЕЕР
     const audio = document.getElementById('audioPlayer');
     const playBtn = document.getElementById('playBtn');
     const playOverlay = document.getElementById('playOverlay');
@@ -691,7 +691,6 @@
 
     let audioContext, analyser, dataArray, isInit = false;
 
-    // Инициализация Web Audio
     function initAudioContext() {
         if (isInit) return;
         try {
@@ -711,11 +710,9 @@
         }
     }
 
-    // Play/Pause функция
     function togglePlay() {
         initAudioContext();
         if (audioContext && audioContext.state === 'suspended') audioContext.resume();
-        
         if (audio.paused) {
             audio.play();
         } else {
@@ -723,13 +720,9 @@
         }
     }
 
-    // Клик по обложке
     coverWrapper.addEventListener('click', togglePlay);
-    
-    // Клик по кнопке play
     playBtn.addEventListener('click', togglePlay);
 
-    // События аудио
     audio.addEventListener('play', () => {
         playBtn.textContent = '⏸';
         playOverlay.classList.add('playing');
@@ -753,8 +746,7 @@
 
     audio.addEventListener('timeupdate', () => {
         if (audio.duration) {
-            const pct = (audio.currentTime / audio.duration) * 100;
-            progressBar.style.width = pct + '%';
+            progressBar.style.width = (audio.currentTime / audio.duration * 100) + '%';
             currentTimeEl.textContent = formatTime(audio.currentTime);
         }
     });
@@ -763,7 +755,6 @@
         durationEl.textContent = formatTime(audio.duration);
     });
 
-    // Перемотка
     rewindBtn.addEventListener('click', () => { 
         audio.currentTime = Math.max(0, audio.currentTime - 10); 
     });
@@ -772,14 +763,12 @@
         audio.currentTime = Math.min(audio.duration || 0, audio.currentTime + 10); 
     });
 
-    // Клик по прогресс-бару
     progressContainer.addEventListener('click', (e) => {
         const rect = progressContainer.getBoundingClientRect();
         const pct = (e.clientX - rect.left) / rect.width;
         if (audio.duration) audio.currentTime = pct * audio.duration;
     });
 
-    // Громкость
     volumeSlider.addEventListener('input', (e) => { 
         audio.volume = e.target.value; 
     });
@@ -816,7 +805,6 @@
                 x += bw;
             }
         } else {
-            // Idle анимация
             const barCount = 48;
             const bw = w / barCount;
             const t = Date.now() / 1000;
