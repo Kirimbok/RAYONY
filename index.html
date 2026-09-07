@@ -5,10 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ТЁМНЫЙ РАЙОН</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Mono:wght@400;700&display=swap');
+        
         :root {
-            --bg-color: #050505;
-            --text-color: #00ff41;
-            --secondary: #1a1a1a;
+            --bg-color: #000000;
+            --matrix-green: #00ff41;
+            --matrix-dark: #008f11;
+            --matrix-dim: #003b00;
+            --secondary: #0a0a0a;
+            --border: #1a1a1a;
         }
 
         * {
@@ -19,216 +24,692 @@
 
         body {
             background-color: var(--bg-color);
-            color: var(--text-color);
-            font-family: 'Courier New', monospace;
+            color: var(--matrix-green);
+            font-family: 'Noto Mono', monospace;
             overflow-x: hidden;
+            line-height: 1.8;
+            position: relative;
+        }
+
+        /* Матричный фон */
+        #matrix-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.15;
         }
 
         .container {
-            max-width: 900px;
+            max-width: 1000px;
             margin: 0 auto;
-            padding: 20px;
+            padding: 40px 20px;
+            position: relative;
+            z-index: 1;
         }
 
-        /* Визуализатор */
-        .visualizer {
+        /* Реальный эквалайзер */
+        .equalizer-wrapper {
             width: 100%;
-            height: 200px;
-            background: linear-gradient(180deg, #0a0a0a 0%, #1a1a1a 100%);
-            border: 1px solid #333;
-            margin-bottom: 30px;
+            height: 250px;
+            background: linear-gradient(180deg, #000 0%, #001100 100%);
+            border: 2px solid var(--matrix-dark);
+            margin-bottom: 40px;
             position: relative;
             overflow: hidden;
-            box-shadow: 0 0 30px rgba(0, 255, 65, 0.1);
+            box-shadow: 0 0 50px rgba(0, 255, 65, 0.2),
+                        inset 0 0 30px rgba(0, 255, 65, 0.05);
         }
 
-        .visualizer-bar {
+        #equalizer {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        .eq-label {
             position: absolute;
-            bottom: 0;
-            width: 4px;
-            background: linear-gradient(0deg, #00ff41, #00cc33);
-            animation: visualize 0.5s ease-in-out infinite;
-            box-shadow: 0 0 10px #00ff41;
+            top: 10px;
+            left: 15px;
+            font-size: 0.75rem;
+            color: var(--matrix-dark);
+            letter-spacing: 2px;
+            z-index: 10;
         }
 
-        @keyframes visualize {
-            0%, 100% { height: 10%; }
-            50% { height: 90%; }
+        .eq-status {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 0.75rem;
+            color: var(--matrix-dim);
+            letter-spacing: 2px;
+            z-index: 10;
         }
 
-        /* Генерация баров визуализатора */
-        .visualizer-bar:nth-child(1) { left: 10%; animation-delay: 0s; }
-        .visualizer-bar:nth-child(2) { left: 20%; animation-delay: 0.1s; }
-        .visualizer-bar:nth-child(3) { left: 30%; animation-delay: 0.2s; }
-        .visualizer-bar:nth-child(4) { left: 40%; animation-delay: 0.15s; }
-        .visualizer-bar:nth-child(5) { left: 50%; animation-delay: 0.3s; }
-        .visualizer-bar:nth-child(6) { left: 60%; animation-delay: 0.2s; }
-        .visualizer-bar:nth-child(7) { left: 70%; animation-delay: 0.1s; }
-        .visualizer-bar:nth-child(8) { left: 80%; animation-delay: 0.25s; }
-        .visualizer-bar:nth-child(9) { left: 90%; animation-delay: 0.15s; }
+        .eq-status.active {
+            color: var(--matrix-green);
+            animation: blink 1s infinite;
+        }
 
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0.3; }
+        }
+
+        /* Заголовок */
         h1 {
             text-align: center;
-            font-size: 3rem;
+            font-size: 3.5rem;
             margin-bottom: 10px;
             text-transform: uppercase;
-            letter-spacing: 5px;
-            text-shadow: 0 0 20px rgba(0, 255, 65, 0.5);
-            animation: glitch 3s infinite;
+            letter-spacing: 8px;
+            text-shadow: 0 0 30px rgba(0, 255, 65, 0.6);
+            animation: titleGlitch 5s infinite;
         }
 
-        .track-info {
+        .subtitle {
             text-align: center;
+            color: var(--matrix-dim);
+            font-size: 0.9rem;
+            margin-bottom: 40px;
+            letter-spacing: 3px;
+        }
+
+        /* Инфо трека */
+        .track-meta {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
             margin-bottom: 30px;
-            padding: 20px;
+            padding: 15px 30px;
             background: var(--secondary);
-            border: 1px solid #333;
+            border: 1px solid var(--border);
+            flex-wrap: wrap;
         }
 
-        .track-info p {
-            margin: 5px 0;
-            font-size: 1.1rem;
+        .meta-item {
+            text-align: center;
         }
 
-        .track-info span {
-            color: #888;
+        .meta-label {
+            color: #444;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .meta-value {
+            color: var(--matrix-green);
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-top: 5px;
         }
 
         /* Плеер */
-        .player {
+        .player-wrapper {
+            margin-bottom: 50px;
+            padding: 20px;
+            background: var(--secondary);
+            border: 1px solid var(--border);
+        }
+
+        audio {
             width: 100%;
-            margin-bottom: 40px;
             filter: invert(1) hue-rotate(180deg);
         }
 
         /* Галерея обложек */
-        .covers-gallery {
-            margin: 40px 0;
+        .gallery {
+            margin: 50px 0;
         }
 
-        .cover-item {
-            margin-bottom: 40px;
-            border: 1px solid #333;
-            background: #0a0a0a;
-            padding: 15px;
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
-
-        .cover-item:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 5px 30px rgba(0, 255, 65, 0.2);
-        }
-
-        .cover-item img {
-            width: 100%;
-            height: auto;
-            display: block;
-            filter: contrast(1.1);
-        }
-
-        .cover-label {
+        .gallery-title {
             text-align: center;
-            margin-top: 10px;
+            margin-bottom: 30px;
+            color: var(--matrix-dim);
             font-size: 0.9rem;
-            color: #666;
+            letter-spacing: 4px;
+            text-transform: uppercase;
         }
 
+        .covers-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+        }
+
+        .cover-card {
+            border: 1px solid var(--border);
+            background: var(--secondary);
+            overflow: hidden;
+            transition: all 0.4s ease;
+            position: relative;
+        }
+
+        .cover-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 10px 40px rgba(0, 255, 65, 0.25);
+            border-color: var(--matrix-dark);
+        }
+
+        .cover-card img {
+            width: 100%;
+            height: 280px;
+            object-fit: cover;
+            filter: contrast(1.15) brightness(0.9);
+            transition: filter 0.3s;
+        }
+
+        .cover-card:hover img {
+            filter: contrast(1.2) brightness(1);
+        }
+
+        .cover-version {
+            text-align: center;
+            padding: 15px;
+            color: var(--matrix-dim);
+            font-size: 0.85rem;
+            letter-spacing: 2px;
+            border-top: 1px solid var(--border);
+        }
+
+        /* Текст песни */
+        .lyrics-section {
+            margin: 60px 0;
+            padding: 40px;
+            background: var(--secondary);
+            border: 1px solid var(--border);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .lyrics-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--matrix-green), transparent);
+            animation: scanline 8s linear infinite;
+        }
+
+        @keyframes scanline {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .lyrics-title {
+            text-align: center;
+            margin-bottom: 40px;
+            color: var(--matrix-green);
+            font-size: 1.3rem;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+        }
+
+        .lyrics-content {
+            font-size: 0.95rem;
+            line-height: 2.2;
+            white-space: pre-wrap;
+        }
+
+        .verse {
+            margin-bottom: 35px;
+            padding-left: 20px;
+            border-left: 2px solid var(--border);
+            transition: border-color 0.3s;
+        }
+
+        .verse:hover {
+            border-left-color: var(--matrix-dark);
+        }
+
+        .verse-label {
+            color: var(--matrix-dim);
+            font-size: 0.8rem;
+            margin-bottom: 15px;
+            display: block;
+            letter-spacing: 3px;
+        }
+
+        .line {
+            display: block;
+            margin: 8px 0;
+            color: #88aa88;
+            transition: all 0.3s;
+            cursor: default;
+        }
+
+        .line:hover {
+            color: var(--matrix-green);
+            text-shadow: 0 0 10px rgba(0, 255, 65, 0.4);
+            padding-left: 10px;
+        }
+
+        .chorus {
+            color: var(--matrix-dark);
+            font-weight: bold;
+        }
+
+        .adlib {
+            color: #444;
+            font-size: 0.85rem;
+            font-style: italic;
+        }
+
+        /* Эдлибы бонус */
+        .adlibs-bonus {
+            margin-top: 50px;
+            padding: 30px;
+            background: rgba(0, 20, 0, 0.3);
+            border: 1px dashed var(--border);
+        }
+
+        .adlibs-title {
+            color: var(--matrix-dim);
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+            letter-spacing: 3px;
+        }
+
+        .adlib-tag {
+            display: inline-block;
+            padding: 5px 12px;
+            margin: 4px;
+            background: var(--secondary);
+            border: 1px solid var(--border);
+            color: var(--matrix-dim);
+            font-size: 0.8rem;
+            transition: all 0.3s;
+        }
+
+        .adlib-tag:hover {
+            background: var(--matrix-green);
+            color: #000;
+            border-color: var(--matrix-green);
+            transform: scale(1.05);
+        }
+
+        /* Footer */
         footer {
             text-align: center;
-            padding: 30px;
-            border-top: 1px solid #333;
-            color: #444;
-            font-size: 0.8rem;
+            padding: 40px;
+            margin-top: 60px;
+            border-top: 1px solid var(--border);
+            color: #333;
+            font-size: 0.75rem;
+            letter-spacing: 2px;
         }
 
-        @keyframes glitch {
+        /* Анимации */
+        @keyframes titleGlitch {
             0%, 90%, 100% { transform: translate(0); }
-            92% { transform: translate(-2px, 2px); }
-            94% { transform: translate(2px, -2px); }
-            96% { transform: translate(-2px, -2px); }
-            98% { transform: translate(2px, 2px); }
+            92% { transform: translate(-3px, 3px); }
+            94% { transform: translate(3px, -3px); }
+            96% { transform: translate(-3px, -3px); }
+            98% { transform: translate(3px, 3px); }
         }
 
-        @media (max-width: 600px) {
-            h1 { font-size: 2rem; }
-            .visualizer { height: 150px; }
+        /* Адаптив */
+        @media (max-width: 768px) {
+            h1 { font-size: 2rem; letter-spacing: 4px; }
+            .track-meta { gap: 20px; }
+            .lyrics-section { padding: 25px; }
+            .covers-grid { grid-template-columns: 1fr; }
+            .equalizer-wrapper { height: 180px; }
         }
     </style>
 </head>
 <body>
 
+<!-- Матричный фон -->
+<canvas id="matrix-bg"></canvas>
+
 <div class="container">
-    <!-- Визуализатор -->
-    <div class="visualizer">
-        <div class="visualizer-bar"></div>
-        <div class="visualizer-bar"></div>
-        <div class="visualizer-bar"></div>
-        <div class="visualizer-bar"></div>
-        <div class="visualizer-bar"></div>
-        <div class="visualizer-bar"></div>
-        <div class="visualizer-bar"></div>
-        <div class="visualizer-bar"></div>
-        <div class="visualizer-bar"></div>
+    <!-- Реальный эквалайзер -->
+    <div class="equalizer-wrapper">
+        <div class="eq-label">FREQUENCY_ANALYSIS</div>
+        <div class="eq-status" id="eqStatus">STANDBY</div>
+        <canvas id="equalizer"></canvas>
     </div>
 
     <h1>ТЁМНЫЙ РАЙОН</h1>
+    <div class="subtitle">// PROTOCOL_X_ZERO // DOCUMENTARY_MODE</div>
 
-    <!-- Инфо о треке -->
-    <div class="track-info">
-        <p><span>ТЕМП:</span> 140 BPM</p>
-        <p><span>ТОНАЛЬНОСТЬ:</span> C# Minor</p>
+    <!-- Мета информация -->
+    <div class="track-meta">
+        <div class="meta-item">
+            <div class="meta-label">Темп</div>
+            <div class="meta-value">140 BPM</div>
+        </div>
+        <div class="meta-item">
+            <div class="meta-label">Тональность</div>
+            <div class="meta-value">C# Minor</div>
+        </div>
+        <div class="meta-item">
+            <div class="meta-label">Длительность</div>
+            <div class="meta-value">3:24</div>
+        </div>
     </div>
 
     <!-- Плеер -->
-    <audio class="player" controls>
-        <source src="rayony.m4a" type="audio/mp4">
-    </audio>
+    <div class="player-wrapper">
+        <audio controls id="audioPlayer" crossorigin="anonymous">
+            <source src="rayony.m4a" type="audio/mp4">
+            <source src="rayony.mp3" type="audio/mpeg">
+        </audio>
+    </div>
 
     <!-- Галерея обложек -->
-    <div class="covers-gallery">
+    <div class="gallery">
+        <div class="gallery-title">/// VISUAL_VERSIONS</div>
+        <div class="covers-grid">
+            <div class="cover-card">
+                <img src="cover.png" alt="Version 1">
+                <div class="cover-version">V.01 // BLUE_SMOKE</div>
+            </div>
+            <div class="cover-card">
+                <img src="cover_wave.png" alt="Version 2">
+                <div class="cover-version">V.02 // DIGITAL_WAVE</div>
+            </div>
+            <div class="cover-card">
+                <img src="cover_glitch.png" alt="Version 3">
+                <div class="cover-version">V.03 // SYSTEM_BROKEN</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Текст песни -->
+    <div class="lyrics-section">
+        <div class="lyrics-title">/// LYRICS_DATA</div>
+        <div class="lyrics-content">
+            <div class="verse">
+                <span class="verse-label">[КУПЛЕТ_01]</span>
+                <span class="line">В тени бетонных стен, где свет не достаёт,</span>
+                <span class="line">Тут каждый второй знает, как судьба бьёт.</span>
+                <span class="line">Дым сигарет вперемешку с туманом,</span>
+                <span class="line">Мы идём по краю, сыты обманом.</span>
+                <span class="line">Холод по венам, взгляд ледяной,</span>
+                <span class="line">Этот город забрал мой покой.</span>
+                <span class="line">Скрежет металла, эхо шагов,</span>
+                <span class="line">Здесь выживает лишь тот, кто готов.</span>
+                <span class="line">Крутятся колёса, время бежит,</span>
+                <span class="line">Но мой район всё так же молчит.</span>
+                <span class="line">Чувствуешь дрожь — это бас или страх?</span>
+                <span class="line">Вся наша жизнь — это пыль на руках.</span>
+                <span class="line">Сгущаются тучи, пора делать ход,</span>
+                <span class="line">Смотри, как эта тьма идёт!</span>
+            </div>
+
+            <div class="verse chorus">
+                <span class="verse-label">[ПРИПЕВ]</span>
+                <span class="line">Это тёмный район, тут свои законы,</span>
+                <span class="line">Каждый шаг — риск, мимо летят патроны.</span>
+                <span class="line">Мы не просим пощады, мы берём своё,</span>
+                <span class="line">Тьма укрывает нас — это наше бытиё.</span>
+                <span class="line" style="margin-top: 15px;">(x2)</span>
+            </div>
+
+            <div class="verse">
+                <span class="verse-label">[КУПЛЕТ_02]</span>
+                <span class="line">Фонари горят тускло, как чьи-то надежды,</span>
+                <span class="line">Мы прячем глаза под капюшоны одежды.</span>
+                <span class="line">Тут фальшь не прощают, тут видят насквозь,</span>
+                <span class="line">Столько судеб разбилось, столько жизней врозь.</span>
+                <span class="line">Но мы держим строй, мы стоим до конца,</span>
+                <span class="line">Нет страха в глазах, нет дрожи с лица.</span>
+                <span class="line">Это дым и закон, наш вечный туман,</span>
+                <span class="line">Город грехов и сплошной обман.</span>
+                <span class="line">Слышишь этот шёпот? Он зовёт нас во тьму,</span>
+                <span class="line">Я не верю словам, я не верю ничему.</span>
+                <span class="line">Только то, что внутри, только то, что моё,</span>
+                <span class="line">Скоро этот огонь поглотит всё!</span>
+            </div>
+
+            <div class="verse">
+                <span class="verse-label">[АУТРО]</span>
+                <span class="line">Мы не просим пощады, мы берём своё,</span>
+                <span class="line">Тьма укрывает нас — это наше бытиё.</span>
+                <span class="line adlib" style="margin-top: 20px;">(Свой район...)</span>
+                <span class="line adlib">(Холод...)</span>
+                <span class="line adlib">(Система сломана...)</span>
+                <span class="line adlib">(Тёмный район...)</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Бонус эдлибы -->
+    <div class="adlibs-bonus">
+        <div class="adlibs-title">/// AUDIO_LAYERS // ADLIBS_BONUS</div>
+        <div style="margin-bottom: 15px; color: #444; font-size: 0.8rem;">ATMOSPHERE:</div>
+        <span class="adlib-tag">Свой район...</span>
+        <span class="adlib-tag">Холод...</span>
+        <span class="adlib-tag">Пустота...</span>
+        <span class="adlib-tag">Бетон...</span>
+        <span class="adlib-tag">Дым...</span>
+        <span class="adlib-tag">Ночь...</span>
         
-        <!-- Обложка 1: Синий дым -->
-        <div class="cover-item">
-            <img src="cover.png" alt="Обложка 1: Темный Район">
-            <div class="cover-label">VERSION 01 // BLUE SMOKE</div>
-        </div>
-
-        <!-- Обложка 2: Зеленая волна -->
-        <div class="cover-item">
-            <img src="cover_wave.png" alt="Обложка 2: Звуковая волна">
-            <div class="cover-label">VERSION 02 // DIGITAL WAVE</div>
-        </div>
-
-        <!-- Обложка 3: Система сломана -->
-        <div class="cover-item">
-            <img src="cover_glitch.png" alt="Обложка 3: Глитч">
-            <div class="cover-label">VERSION 03 // SYSTEM BROKEN</div>
-        </div>
-
+        <div style="margin: 20px 0 15px 0; color: #444; font-size: 0.8rem;">RHYTHM:</div>
+        <span class="adlib-tag">Па-па!</span>
+        <span class="adlib-tag">Ту-ту!</span>
+        <span class="adlib-tag">Эй!</span>
+        <span class="adlib-tag">Воу!</span>
+        <span class="adlib-tag">Чек-чек!</span>
+        <span class="adlib-tag">Грр-ра!</span>
+        
+        <div style="margin: 20px 0 15px 0; color: #444; font-size: 0.8rem;">MEANING:</div>
+        <span class="adlib-tag">Свои!</span>
+        <span class="adlib-tag">На связи!</span>
+        <span class="adlib-tag">Реально!</span>
+        <span class="adlib-tag">Без фейков!</span>
+        <span class="adlib-tag">Только правда!</span>
+        <span class="adlib-tag">Здесь!</span>
     </div>
 
     <footer>
-        PROTOCOL X = 0<br>
-        NO EXPECTATIONS // JUST REALITY
+        PROTOCOL_X_ZERO // 2024<br>
+        NO_EXPECTATIONS // JUST_REALITY
     </footer>
 </div>
 
 <script>
-    // Анимация визуализатора реагирует на аудио
-    const audio = document.querySelector('audio');
-    const bars = document.querySelectorAll('.visualizer-bar');
+    // ==========================================
+    // МАТРИЧНЫЙ ФОН
+    // ==========================================
+    const matrixCanvas = document.getElementById('matrix-bg');
+    const matrixCtx = matrixCanvas.getContext('2d');
+    
+    matrixCanvas.width = window.innerWidth;
+    matrixCanvas.height = window.innerHeight;
+    
+    const chars = 'アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン0123456789';
+    const charArray = chars.split('');
+    const fontSize = 14;
+    const columns = matrixCanvas.width / fontSize;
+    const drops = [];
+    
+    for (let i = 0; i < columns; i++) {
+        drops[i] = Math.random() * -100;
+    }
+    
+    function drawMatrix() {
+        matrixCtx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+        matrixCtx.fillRect(0, 0, matrixCanvas.width, matrixCanvas.height);
+        
+        matrixCtx.fillStyle = '#00ff41';
+        matrixCtx.font = fontSize + 'px monospace';
+        
+        for (let i = 0; i < drops.length; i++) {
+            const text = charArray[Math.floor(Math.random() * charArray.length)];
+            matrixCtx.fillText(text, i * fontSize, drops[i] * fontSize);
+            
+            if (drops[i] * fontSize > matrixCanvas.height && Math.random() > 0.975) {
+                drops[i] = 0;
+            }
+            drops[i]++;
+        }
+    }
+    
+    setInterval(drawMatrix, 35);
+    
+    window.addEventListener('resize', () => {
+        matrixCanvas.width = window.innerWidth;
+        matrixCanvas.height = window.innerHeight;
+    });
+    
+    // ==========================================
+    // РЕАЛЬНЫЙ ЭКВАЛАЙЗЕР
+    // ==========================================
+    const audio = document.getElementById('audioPlayer');
+    const eqCanvas = document.getElementById('equalizer');
+    const eqCtx = eqCanvas.getContext('2d');
+    const eqStatus = document.getElementById('eqStatus');
+    
+    let audioContext, analyser, source, dataArray, bufferLength;
+    let isInitialized = false;
+    
+    function initAudioContext() {
+        if (isInitialized) return;
+        
+        audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        analyser = audioContext.createAnalyser();
+        source = audioContext.createMediaElementSource(audio);
+        
+        source.connect(analyser);
+        analyser.connect(audioContext.destination);
+        
+        analyser.fftSize = 256;
+        bufferLength = analyser.frequencyBinCount;
+        dataArray = new Uint8Array(bufferLength);
+        
+        isInitialized = true;
+    }
+    
+    function resizeEqCanvas() {
+        const wrapper = eqCanvas.parentElement;
+        eqCanvas.width = wrapper.clientWidth;
+        eqCanvas.height = wrapper.clientHeight;
+    }
+    
+    resizeEqCanvas();
+    window.addEventListener('resize', resizeEqCanvas);
+    
+    function drawEqualizer() {
+        requestAnimationFrame(drawEqualizer);
+        
+        const width = eqCanvas.width;
+        const height = eqCanvas.height;
+        
+        eqCtx.fillStyle = 'rgba(0, 0, 0, 0.2)';
+        eqCtx.fillRect(0, 0, width, height);
+        
+        if (!isInitialized || audio.paused) {
+            // Режим ожидания - статичные полосы
+            const barWidth = width / 64;
+            for (let i = 0; i < 64; i++) {
+                const barHeight = 10 + Math.sin(Date.now() / 1000 + i * 0.2) * 5;
+                const x = i * barWidth;
+                const y = height - barHeight;
+                
+                const gradient = eqCtx.createLinearGradient(0, y, 0, height);
+                gradient.addColorStop(0, '#003b00');
+                gradient.addColorStop(1, '#001100');
+                
+                eqCtx.fillStyle = gradient;
+                eqCtx.fillRect(x, y, barWidth - 2, barHeight);
+            }
+            return;
+        }
+        
+        analyser.getByteFrequencyData(dataArray);
+        
+        const barWidth = width / bufferLength;
+        let x = 0;
+        
+        for (let i = 0; i < bufferLength; i++) {
+            const barHeight = (dataArray[i] / 255) * height;
+            const y = height - barHeight;
+            
+            // Градиент от темно-зеленого к ярко-зеленому
+            const gradient = eqCtx.createLinearGradient(0, y, 0, height);
+            gradient.addColorStop(0, '#00ff41');
+            gradient.addColorStop(0.5, '#00cc33');
+            gradient.addColorStop(1, '#003b00');
+            
+            eqCtx.fillStyle = gradient;
+            eqCtx.fillRect(x, y, barWidth - 1, barHeight);
+            
+            // Свечение
+            eqCtx.shadowBlur = 10;
+            eqCtx.shadowColor = '#00ff41';
+            eqCtx.fillRect(x, y, barWidth - 1, 2);
+            eqCtx.shadowBlur = 0;
+            
+            x += barWidth;
+        }
+        
+        // Сетка поверх
+        eqCtx.strokeStyle = 'rgba(0, 255, 65, 0.1)';
+        eqCtx.lineWidth = 1;
+        for (let i = 0; i < width; i += 20) {
+            eqCtx.beginPath();
+            eqCtx.moveTo(i, 0);
+            eqCtx.lineTo(i, height);
+            eqCtx.stroke();
+        }
+        for (let i = 0; i < height; i += 20) {
+            eqCtx.beginPath();
+            eqCtx.moveTo(0, i);
+            eqCtx.lineTo(width, i);
+            eqCtx.stroke();
+        }
+    }
+    
+    drawEqualizer();
     
     audio.addEventListener('play', () => {
-        bars.forEach(bar => {
-            bar.style.animationDuration = `${0.3 + Math.random() * 0.4}s`;
-        });
+        if (!isInitialized) {
+            initAudioContext();
+        }
+        if (audioContext.state === 'suspended') {
+            audioContext.resume();
+        }
+        eqStatus.textContent = 'ANALYZING...';
+        eqStatus.classList.add('active');
     });
     
     audio.addEventListener('pause', () => {
-        bars.forEach(bar => {
-            bar.style.animationDuration = '0.5s';
-        });
+        eqStatus.textContent = 'STANDBY';
+        eqStatus.classList.remove('active');
     });
+    
+    audio.addEventListener('ended', () => {
+        eqStatus.textContent = 'COMPLETE';
+        eqStatus.classList.remove('active');
+    });
+    
+    // ==========================================
+    // ЭФФЕКТ ПЕЧАТНОЙ МАШИНКИ
+    // ==========================================
+    const title = document.querySelector('h1');
+    const originalText = title.textContent;
+    title.textContent = '';
+    let charIndex = 0;
+    
+    setTimeout(() => {
+        const typeWriter = setInterval(() => {
+            if (charIndex < originalText.length) {
+                title.textContent += originalText.charAt(charIndex);
+                charIndex++;
+            } else {
+                clearInterval(typeWriter);
+            }
+        }, 100);
+    }, 500);
 </script>
 
 </body>
