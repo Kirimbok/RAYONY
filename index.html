@@ -3,228 +3,233 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ТЁМНЫЙ РАЙОН | Protocol X = 0</title>
+    <title>ТЁМНЫЙ РАЙОН</title>
     <style>
         :root {
             --bg-color: #050505;
-            --text-color: #e0e0e0;
-            --accent-color: #00ff41; /* Матричный зеленый */
-            --secondary-accent: #2a2a2a;
-            --font-main: 'Courier New', Courier, monospace; /* Стиль кода/терминала */
+            --text-color: #00ff41;
+            --secondary: #1a1a1a;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
         body {
             background-color: var(--bg-color);
             color: var(--text-color);
-            font-family: var(--font-main);
-            margin: 0;
-            padding: 0;
-            line-height: 1.6;
-            display: flex;
-            justify-content: center;
+            font-family: 'Courier New', monospace;
+            overflow-x: hidden;
         }
 
         .container {
-            max-width: 800px;
-            width: 90%;
-            padding: 40px 20px;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
         }
 
-        header {
-            text-align: center;
-            margin-bottom: 40px;
-            border-bottom: 1px solid var(--secondary-accent);
-            padding-bottom: 20px;
+        /* Визуализатор */
+        .visualizer {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(180deg, #0a0a0a 0%, #1a1a1a 100%);
+            border: 1px solid #333;
+            margin-bottom: 30px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 30px rgba(0, 255, 65, 0.1);
         }
+
+        .visualizer-bar {
+            position: absolute;
+            bottom: 0;
+            width: 4px;
+            background: linear-gradient(0deg, #00ff41, #00cc33);
+            animation: visualize 0.5s ease-in-out infinite;
+            box-shadow: 0 0 10px #00ff41;
+        }
+
+        @keyframes visualize {
+            0%, 100% { height: 10%; }
+            50% { height: 90%; }
+        }
+
+        /* Генерация баров визуализатора */
+        .visualizer-bar:nth-child(1) { left: 10%; animation-delay: 0s; }
+        .visualizer-bar:nth-child(2) { left: 20%; animation-delay: 0.1s; }
+        .visualizer-bar:nth-child(3) { left: 30%; animation-delay: 0.2s; }
+        .visualizer-bar:nth-child(4) { left: 40%; animation-delay: 0.15s; }
+        .visualizer-bar:nth-child(5) { left: 50%; animation-delay: 0.3s; }
+        .visualizer-bar:nth-child(6) { left: 60%; animation-delay: 0.2s; }
+        .visualizer-bar:nth-child(7) { left: 70%; animation-delay: 0.1s; }
+        .visualizer-bar:nth-child(8) { left: 80%; animation-delay: 0.25s; }
+        .visualizer-bar:nth-child(9) { left: 90%; animation-delay: 0.15s; }
 
         h1 {
-            font-size: 2.5rem;
-            margin: 0;
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            text-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
-        }
-
-        .subtitle {
-            color: #888;
-            font-size: 0.9rem;
-            margin-top: 10px;
-        }
-
-        .cover-art {
-            width: 100%;
-            max-width: 400px;
-            display: block;
-            margin: 0 auto 30px auto;
-            border: 1px solid var(--secondary-accent);
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
-            filter: grayscale(20%) contrast(120%); /* Немного мрачности */
-        }
-
-        .player-wrapper {
-            background: var(--secondary-accent);
-            padding: 20px;
-            border-radius: 4px;
-            margin-bottom: 40px;
             text-align: center;
-            border: 1px solid #333;
-        }
-
-        audio {
-            width: 100%;
-            outline: none;
-            filter: invert(1) hue-rotate(180deg); /* Делаем плеер темным */
-        }
-
-        .manifesto {
-            background: rgba(255, 255, 255, 0.03);
-            padding: 20px;
-            border-left: 3px solid var(--accent-color);
-            margin-bottom: 40px;
-            font-style: italic;
-        }
-
-        .lyrics {
-            white-space: pre-wrap; /* Сохраняет переносы строк */
-            background: #0a0a0a;
-            padding: 20px;
-            border: 1px solid #333;
-            font-size: 0.9rem;
-            color: #bbb;
-            margin-bottom: 40px;
-        }
-
-        .lyrics h3 {
-            color: var(--accent-color);
-            margin-top: 20px;
+            font-size: 3rem;
             margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            text-shadow: 0 0 20px rgba(0, 255, 65, 0.5);
+            animation: glitch 3s infinite;
         }
 
-        .adlibs {
-            font-size: 0.8rem;
+        .track-info {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: var(--secondary);
+            border: 1px solid #333;
+        }
+
+        .track-info p {
+            margin: 5px 0;
+            font-size: 1.1rem;
+        }
+
+        .track-info span {
+            color: #888;
+        }
+
+        /* Плеер */
+        .player {
+            width: 100%;
+            margin-bottom: 40px;
+            filter: invert(1) hue-rotate(180deg);
+        }
+
+        /* Галерея обложек */
+        .covers-gallery {
+            margin: 40px 0;
+        }
+
+        .cover-item {
+            margin-bottom: 40px;
+            border: 1px solid #333;
+            background: #0a0a0a;
+            padding: 15px;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .cover-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 30px rgba(0, 255, 65, 0.2);
+        }
+
+        .cover-item img {
+            width: 100%;
+            height: auto;
+            display: block;
+            filter: contrast(1.1);
+        }
+
+        .cover-label {
+            text-align: center;
+            margin-top: 10px;
+            font-size: 0.9rem;
             color: #666;
-            border-top: 1px dashed #444;
-            padding-top: 20px;
-            margin-top: 40px;
-        }
-
-        .adlibs span {
-            display: inline-block;
-            background: #111;
-            padding: 2px 6px;
-            margin: 2px;
-            border-radius: 3px;
-            color: var(--accent-color);
         }
 
         footer {
             text-align: center;
-            font-size: 0.7rem;
-            color: #555;
-            margin-top: 50px;
-            padding-top: 20px;
-            border-top: 1px solid #222;
-        }
-
-        /* Эффект глитча при наведении на заголовок */
-        h1:hover {
-            animation: glitch 0.3s cubic-bezier(.25, .46, .45, .94) both infinite;
-            color: var(--accent-color);
+            padding: 30px;
+            border-top: 1px solid #333;
+            color: #444;
+            font-size: 0.8rem;
         }
 
         @keyframes glitch {
-            0% { transform: translate(0) }
-            20% { transform: translate(-2px, 2px) }
-            40% { transform: translate(-2px, -2px) }
-            60% { transform: translate(2px, 2px) }
-            80% { transform: translate(2px, -2px) }
-            100% { transform: translate(0) }
+            0%, 90%, 100% { transform: translate(0); }
+            92% { transform: translate(-2px, 2px); }
+            94% { transform: translate(2px, -2px); }
+            96% { transform: translate(-2px, -2px); }
+            98% { transform: translate(2px, 2px); }
+        }
+
+        @media (max-width: 600px) {
+            h1 { font-size: 2rem; }
+            .visualizer { height: 150px; }
         }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <header>
-        <h1>ТЁМНЫЙ РАЙОН</h1>
-        <div class="subtitle">PROTOCOL X = 0 // DOCUMENTARY FIXATION</div>
-    </header>
-
-    <!-- Обложка -->
-    <img src="cover.png" alt="Обложка трека Тёмный Район" class="cover-art">
-
-    <!-- Аудиоплеер -->
-    <div class="player-wrapper">
-        <audio controls>
-            <source src="rayony.m4a" type="audio/mp4">
-            Ваш браузер не поддерживает аудио элемент.
-        </audio>
+    <!-- Визуализатор -->
+    <div class="visualizer">
+        <div class="visualizer-bar"></div>
+        <div class="visualizer-bar"></div>
+        <div class="visualizer-bar"></div>
+        <div class="visualizer-bar"></div>
+        <div class="visualizer-bar"></div>
+        <div class="visualizer-bar"></div>
+        <div class="visualizer-bar"></div>
+        <div class="visualizer-bar"></div>
+        <div class="visualizer-bar"></div>
     </div>
 
-    <!-- Манифест -->
-    <div class="manifesto">
-        <p><strong>СИСТЕМНОЕ СООБЩЕНИЕ:</strong></p>
-        <p>Этот трек записан не в студии. Он рожден в точке обнуления. Среда, которая отнимает всё внешнее, чтобы проверить, что осталось внутри. Холод. Бетон. Ясность.</p>
-        <p>Мы не просим пощады. Мы фиксируем реальность.</p>
+    <h1>ТЁМНЫЙ РАЙОН</h1>
+
+    <!-- Инфо о треке -->
+    <div class="track-info">
+        <p><span>ТЕМП:</span> 140 BPM</p>
+        <p><span>ТОНАЛЬНОСТЬ:</span> C# Minor</p>
     </div>
 
-    <!-- Текст трека -->
-    <div class="lyrics">
-        <h3>[КУПЛЕТ 1]</h3>
-        В тени бетонных стен, где свет не достаёт,
-        Тут каждый второй знает, как судьба бьёт.
-        Дым сигарет вперемешку с туманом,
-        Мы идём по краю, сыты обманом.
-        Холод по венам, взгляд ледяной,
-        Этот город забрал мой покой.
-        Скрежет металла, эхо шагов,
-        Здесь выживает лишь тот, кто готов.
-        Крутятся колёса, время бежит,
-        Но мой район всё так же молчит.
-        Чувствуешь дрожь — это бас или страх?
-        Вся наша жизнь — это пыль на руках.
-        Сгущаются тучи, пора делать ход,
-        Смотри, как эта тьма идёт!
+    <!-- Плеер -->
+    <audio class="player" controls>
+        <source src="rayony.m4a" type="audio/mp4">
+    </audio>
 
-        <h3>[ПРИПЕВ]</h3>
-        Это тёмный район, тут свои законы,
-        Каждый шаг — риск, мимо летят патроны.
-        Мы не просим пощады, мы берём своё,
-        Тьма укрывает нас — это наше бытиё.
-        (x2)
+    <!-- Галерея обложек -->
+    <div class="covers-gallery">
+        
+        <!-- Обложка 1: Синий дым -->
+        <div class="cover-item">
+            <img src="cover.png" alt="Обложка 1: Темный Район">
+            <div class="cover-label">VERSION 01 // BLUE SMOKE</div>
+        </div>
 
-        <h3>[КУПЛЕТ 2]</h3>
-        Фонари горят тускло, как чьи-то надежды,
-        Мы прячем глаза под капюшоны одежды.
-        Тут фальшь не прощают, тут видят насквозь,
-        Сколько судеб разбилось, сколько жизней врозь.
-        Но мы держим строй, мы стоим до конца,
-        Нет страха в глазах, нет дрожи с лица.
-        Это дым и закон, наш вечный туман,
-        Город грехов и сплошной обман.
-        Слышишь этот шёпот? Он зовёт нас во тьму,
-        Я не верю словам, я не верю ничему.
-        Только то, что внутри, только то, что моё,
-        Скоро этот огонь поглотит всё!
+        <!-- Обложка 2: Зеленая волна -->
+        <div class="cover-item">
+            <img src="cover_wave.png" alt="Обложка 2: Звуковая волна">
+            <div class="cover-label">VERSION 02 // DIGITAL WAVE</div>
+        </div>
 
-        <h3>[АУТРО]</h3>
-        Мы не просим пощады, мы берём своё,
-        Тьма укрывает нас — это наше бытиё.
-    </div>
+        <!-- Обложка 3: Система сломана -->
+        <div class="cover-item">
+            <img src="cover_glitch.png" alt="Обложка 3: Глитч">
+            <div class="cover-label">VERSION 03 // SYSTEM BROKEN</div>
+        </div>
 
-    <!-- Бонус: Эдлибы -->
-    <div class="adlibs">
-        <h3>// AUDIO_LAYERS (BONUS)</h3>
-        <p>Атмосфера: <span>Свой район...</span> <span>Холод...</span> <span>Пустота...</span> <span>Бетон...</span></p>
-        <p>Ритм: <span>Па-па!</span> <span>Ту-ту!</span> <span>Грр-ра!</span> <span>Чек-чек!</span></p>
-        <p>Смысл: <span>Свои!</span> <span>На связи!</span> <span>Реально!</span> <span>Здесь!</span></p>
     </div>
 
     <footer>
-        &copy; 2024 KIRILL KORCHAGIN // DARK DISTRICT RECORDS<br>
-        NO EXPECTATIONS. JUST REALITY.
+        PROTOCOL X = 0<br>
+        NO EXPECTATIONS // JUST REALITY
     </footer>
 </div>
+
+<script>
+    // Анимация визуализатора реагирует на аудио
+    const audio = document.querySelector('audio');
+    const bars = document.querySelectorAll('.visualizer-bar');
+    
+    audio.addEventListener('play', () => {
+        bars.forEach(bar => {
+            bar.style.animationDuration = `${0.3 + Math.random() * 0.4}s`;
+        });
+    });
+    
+    audio.addEventListener('pause', () => {
+        bars.forEach(bar => {
+            bar.style.animationDuration = '0.5s';
+        });
+    });
+</script>
 
 </body>
 </html>
