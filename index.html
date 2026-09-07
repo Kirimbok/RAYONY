@@ -5,379 +5,445 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ТЁМНЫЙ РАЙОН</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Noto+Mono:wght@400;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;500;700&display=swap');
         
-        :root {
-            --bg-color: #000000;
-            --matrix-green: #00ff41;
-            --matrix-dark: #008f11;
-            --matrix-dim: #003b00;
-            --secondary: #0a0a0a;
-            --border: #1a1a1a;
-        }
-
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
+        :root {
+            --neon-green: #00ff41;
+            --neon-blue: #00d4ff;
+            --dark-bg: #000000;
+            --panel-bg: rgba(10, 10, 10, 0.85);
+            --border-glow: rgba(0, 255, 65, 0.3);
+        }
+
         body {
-            background-color: var(--bg-color);
-            color: var(--matrix-green);
-            font-family: 'Noto Mono', monospace;
+            background: var(--dark-bg);
+            color: #fff;
+            font-family: 'Rajdhani', sans-serif;
             overflow-x: hidden;
-            line-height: 1.8;
             position: relative;
         }
 
+        /* Матричный фон */
         #matrix-bg {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: -1;
-            opacity: 0.15;
+            z-index: 0;
+            opacity: 0.12;
         }
 
         .container {
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 40px 20px;
             position: relative;
             z-index: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
         }
 
-        .equalizer-wrapper {
-            width: 100%;
-            height: 250px;
-            background: linear-gradient(180deg, #000 0%, #001100 100%);
-            border: 2px solid var(--matrix-dark);
-            margin-bottom: 40px;
+        /* ГЛАВНЫЙ ЭКРАН С ОБЛОЖКОЙ И ЭКВАЛАЙЗЕРОМ */
+        .hero-section {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
             position: relative;
-            overflow: hidden;
-            box-shadow: 0 0 50px rgba(0, 255, 65, 0.2),
-                        inset 0 0 30px rgba(0, 255, 65, 0.05);
+            padding: 40px 20px;
         }
 
-        #equalizer {
+        .cover-wrapper {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            aspect-ratio: 1;
+            border: 2px solid var(--border-glow);
+            box-shadow: 0 0 60px rgba(0, 255, 65, 0.2),
+                        inset 0 0 60px rgba(0, 0, 0, 0.8);
+            overflow: hidden;
+            margin-bottom: 40px;
+        }
+
+        .cover-image {
             width: 100%;
             height: 100%;
-            display: block;
+            object-fit: cover;
+            filter: contrast(1.2) brightness(0.85);
         }
 
-        .eq-label {
+        /* Эквалайзер поверх обложки */
+        #equalizer-overlay {
             position: absolute;
-            top: 10px;
-            left: 15px;
-            font-size: 0.75rem;
-            color: var(--matrix-dark);
-            letter-spacing: 2px;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 40%;
+            pointer-events: none;
             z-index: 10;
         }
 
-        .eq-status {
+        .cover-overlay-info {
             position: absolute;
-            top: 10px;
-            right: 15px;
-            font-size: 0.75rem;
-            color: var(--matrix-dim);
-            letter-spacing: 2px;
+            top: 20px;
+            left: 20px;
+            right: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
             z-index: 10;
+            pointer-events: none;
         }
 
-        .eq-status.active {
-            color: var(--matrix-green);
-            animation: blink 1s infinite;
+        .status-badge {
+            background: rgba(0, 0, 0, 0.7);
+            border: 1px solid var(--neon-green);
+            padding: 8px 15px;
+            font-family: 'Orbitron', monospace;
+            font-size: 0.75rem;
+            color: var(--neon-green);
+            letter-spacing: 2px;
+            backdrop-filter: blur(10px);
         }
 
-        @keyframes blink {
-            0%, 50% { opacity: 1; }
-            51%, 100% { opacity: 0.3; }
+        .status-badge.active {
+            animation: pulse-badge 1.5s infinite;
+        }
+
+        @keyframes pulse-badge {
+            0%, 100% { box-shadow: 0 0 10px var(--neon-green); }
+            50% { box-shadow: 0 0 20px var(--neon-green), 0 0 30px var(--neon-green); }
+        }
+
+        /* Заголовок с глитчем */
+        .title-container {
+            text-align: center;
+            margin-bottom: 30px;
         }
 
         h1 {
-            text-align: center;
-            font-size: 3.5rem;
-            margin-bottom: 10px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(2.5rem, 8vw, 5rem);
+            font-weight: 900;
             text-transform: uppercase;
             letter-spacing: 8px;
-            text-shadow: 0 0 30px rgba(0, 255, 65, 0.6);
-            animation: titleGlitch 5s infinite;
+            color: var(--neon-green);
+            text-shadow: 0 0 20px var(--neon-green),
+                         0 0 40px var(--neon-green);
+            position: relative;
+            animation: glitch-title 4s infinite;
+        }
+
+        @keyframes glitch-title {
+            0%, 90%, 100% { transform: translate(0); }
+            91% { transform: translate(-2px, 2px); }
+            93% { transform: translate(2px, -2px); }
+            95% { transform: translate(-2px, -2px); }
+            97% { transform: translate(2px, 2px); }
         }
 
         .subtitle {
-            text-align: center;
-            color: var(--matrix-dim);
+            font-family: 'Orbitron', monospace;
             font-size: 0.9rem;
-            margin-bottom: 40px;
-            letter-spacing: 3px;
-        }
-
-        /* Обложка */
-        .cover-section {
-            margin-bottom: 40px;
-            border: 1px solid var(--border);
-            background: var(--secondary);
-            overflow: hidden;
-            box-shadow: 0 0 40px rgba(0, 255, 65, 0.1);
-        }
-
-        .cover-section img {
-            width: 100%;
-            height: auto;
-            display: block;
-            filter: contrast(1.15) brightness(0.95);
-        }
-
-        .cover-label {
-            text-align: center;
-            padding: 15px;
-            color: var(--matrix-dim);
-            font-size: 0.85rem;
-            letter-spacing: 3px;
-            border-top: 1px solid var(--border);
+            color: var(--neon-blue);
+            letter-spacing: 4px;
+            margin-top: 10px;
+            opacity: 0.8;
         }
 
         /* Треки */
-        .tracks-section {
-            margin-bottom: 50px;
+        .tracks-container {
+            width: 100%;
+            max-width: 600px;
+            margin-bottom: 40px;
         }
 
-        .tracks-title {
-            text-align: center;
-            margin-bottom: 25px;
-            color: var(--matrix-dim);
-            font-size: 0.9rem;
-            letter-spacing: 4px;
-            text-transform: uppercase;
+        .track-card {
+            background: var(--panel-bg);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 15px;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+            transition: all 0.4s;
+            position: relative;
+            overflow: hidden;
         }
 
-        .track-item {
-            background: var(--secondary);
-            border: 1px solid var(--border);
-            margin-bottom: 20px;
-            transition: all 0.3s;
+        .track-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 255, 65, 0.1), transparent);
+            transition: left 0.5s;
         }
 
-        .track-item:hover {
-            border-color: var(--matrix-dark);
-            box-shadow: 0 0 20px rgba(0, 255, 65, 0.1);
+        .track-card:hover::before {
+            left: 100%;
         }
 
-        .track-item.playing {
-            border-color: var(--matrix-green);
-            box-shadow: 0 0 30px rgba(0, 255, 65, 0.2);
+        .track-card.active {
+            border-color: var(--neon-green);
+            box-shadow: 0 0 30px rgba(0, 255, 65, 0.3);
         }
 
         .track-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 15px 20px;
-            border-bottom: 1px solid var(--border);
+            margin-bottom: 15px;
         }
 
         .track-number {
-            color: var(--matrix-dark);
+            font-family: 'Orbitron', monospace;
             font-size: 0.8rem;
+            color: var(--neon-blue);
             letter-spacing: 2px;
         }
 
         .track-name {
-            color: var(--matrix-green);
-            font-size: 1.1rem;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #fff;
             letter-spacing: 2px;
             text-transform: uppercase;
         }
 
         .track-duration {
-            color: var(--matrix-dim);
+            font-family: 'Orbitron', monospace;
             font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.5);
         }
 
         .track-player {
-            padding: 15px 20px;
+            width: 100%;
         }
 
         audio {
             width: 100%;
-            filter: invert(1) hue-rotate(180deg);
+            height: 40px;
+            filter: invert(1) hue-rotate(180deg) brightness(1.2);
             outline: none;
         }
 
         /* Мета информация */
-        .track-meta {
-            display: flex;
-            justify-content: center;
-            gap: 40px;
-            margin-bottom: 30px;
-            padding: 15px 30px;
-            background: var(--secondary);
-            border: 1px solid var(--border);
-            flex-wrap: wrap;
+        .meta-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+            max-width: 600px;
+            margin-bottom: 60px;
         }
 
         .meta-item {
+            background: var(--panel-bg);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 20px;
             text-align: center;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s;
+        }
+
+        .meta-item:hover {
+            border-color: var(--neon-green);
+            transform: translateY(-5px);
         }
 
         .meta-label {
-            color: #444;
-            font-size: 0.75rem;
-            text-transform: uppercase;
+            font-family: 'Orbitron', monospace;
+            font-size: 0.7rem;
+            color: rgba(255, 255, 255, 0.5);
             letter-spacing: 2px;
+            margin-bottom: 8px;
         }
 
         .meta-value {
-            color: var(--matrix-green);
-            font-size: 1.2rem;
-            font-weight: bold;
-            margin-top: 5px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--neon-green);
         }
 
-        /* Текст песни */
+        /* Текст песни с анимацией выдвижения */
         .lyrics-section {
-            margin: 60px 0;
-            padding: 40px;
-            background: var(--secondary);
-            border: 1px solid var(--border);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .lyrics-section::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, var(--matrix-green), transparent);
-            animation: scanline 8s linear infinite;
-        }
-
-        @keyframes scanline {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(100%); }
+            padding: 80px 20px;
+            max-width: 800px;
+            margin: 0 auto;
         }
 
         .lyrics-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            color: var(--neon-blue);
+            letter-spacing: 4px;
             text-align: center;
-            margin-bottom: 40px;
-            color: var(--matrix-green);
-            font-size: 1.3rem;
-            letter-spacing: 5px;
+            margin-bottom: 60px;
             text-transform: uppercase;
         }
 
-        .lyrics-content {
-            font-size: 0.95rem;
-            line-height: 2.2;
-            white-space: pre-wrap;
+        .verse-block {
+            margin-bottom: 50px;
+            opacity: 0;
+            transform: translateX(-50px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .verse {
-            margin-bottom: 35px;
-            padding-left: 20px;
-            border-left: 2px solid var(--border);
-            transition: border-color 0.3s;
-        }
-
-        .verse:hover {
-            border-left-color: var(--matrix-dark);
+        .verse-block.visible {
+            opacity: 1;
+            transform: translateX(0);
         }
 
         .verse-label {
-            color: var(--matrix-dim);
-            font-size: 0.8rem;
-            margin-bottom: 15px;
-            display: block;
+            font-family: 'Orbitron', monospace;
+            font-size: 0.9rem;
+            color: var(--neon-green);
             letter-spacing: 3px;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(0, 255, 65, 0.3);
         }
 
-        .line {
-            display: block;
-            margin: 8px 0;
-            color: #88aa88;
+        .lyric-line {
+            font-size: 1.1rem;
+            line-height: 2;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 10px;
+            padding-left: 20px;
+            border-left: 2px solid transparent;
+            transition: all 0.3s;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .verse-block.visible .lyric-line {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .lyric-line:hover {
+            color: var(--neon-green);
+            border-left-color: var(--neon-green);
+            padding-left: 30px;
+            text-shadow: 0 0 10px var(--neon-green);
+        }
+
+        .chorus .lyric-line {
+            color: var(--neon-blue);
+            font-weight: 500;
+        }
+
+        .adlib-line {
+            color: rgba(255, 255, 255, 0.4);
+            font-style: italic;
+            font-size: 0.95rem;
+        }
+
+        /* Эдлибы бонус */
+        .adlibs-section {
+            padding: 60px 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .adlibs-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.2rem;
+            color: var(--neon-blue);
+            letter-spacing: 3px;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .adlib-category {
+            margin-bottom: 30px;
+        }
+
+        .category-label {
+            font-family: 'Orbitron', monospace;
+            font-size: 0.75rem;
+            color: rgba(255, 255, 255, 0.4);
+            letter-spacing: 2px;
+            margin-bottom: 15px;
+        }
+
+        .adlib-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .adlib-tag {
+            background: rgba(0, 255, 65, 0.1);
+            border: 1px solid rgba(0, 255, 65, 0.3);
+            padding: 8px 16px;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.9rem;
+            color: var(--neon-green);
             transition: all 0.3s;
             cursor: default;
         }
 
-        .line:hover {
-            color: var(--matrix-green);
-            text-shadow: 0 0 10px rgba(0, 255, 65, 0.4);
-            padding-left: 10px;
-        }
-
-        .chorus {
-            color: var(--matrix-dark);
-            font-weight: bold;
-        }
-
-        .adlib {
-            color: #444;
-            font-size: 0.85rem;
-            font-style: italic;
-        }
-
-        .adlibs-bonus {
-            margin-top: 50px;
-            padding: 30px;
-            background: rgba(0, 20, 0, 0.3);
-            border: 1px dashed var(--border);
-        }
-
-        .adlibs-title {
-            color: var(--matrix-dim);
-            margin-bottom: 20px;
-            font-size: 0.9rem;
-            letter-spacing: 3px;
-        }
-
-        .adlib-tag {
-            display: inline-block;
-            padding: 5px 12px;
-            margin: 4px;
-            background: var(--secondary);
-            border: 1px solid var(--border);
-            color: var(--matrix-dim);
-            font-size: 0.8rem;
-            transition: all 0.3s;
-        }
-
         .adlib-tag:hover {
-            background: var(--matrix-green);
+            background: var(--neon-green);
             color: #000;
-            border-color: var(--matrix-green);
             transform: scale(1.05);
+            box-shadow: 0 0 20px var(--neon-green);
         }
 
+        /* Footer */
         footer {
             text-align: center;
-            padding: 40px;
-            margin-top: 60px;
-            border-top: 1px solid var(--border);
-            color: #333;
-            font-size: 0.75rem;
-            letter-spacing: 2px;
+            padding: 60px 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            margin-top: 80px;
         }
 
-        @keyframes titleGlitch {
-            0%, 90%, 100% { transform: translate(0); }
-            92% { transform: translate(-3px, 3px); }
-            94% { transform: translate(3px, -3px); }
-            96% { transform: translate(-3px, -3px); }
-            98% { transform: translate(3px, 3px); }
+        .footer-text {
+            font-family: 'Orbitron', monospace;
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.4);
+            letter-spacing: 3px;
+            line-height: 2;
         }
 
+        /* Адаптивность */
         @media (max-width: 768px) {
-            h1 { font-size: 2rem; letter-spacing: 4px; }
-            .track-meta { gap: 20px; }
-            .lyrics-section { padding: 25px; }
-            .equalizer-wrapper { height: 180px; }
-            .track-header { flex-direction: column; gap: 8px; align-items: flex-start; }
+            .cover-wrapper {
+                max-width: 100%;
+            }
+
+            .meta-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .track-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+
+            .lyric-line {
+                font-size: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .meta-grid {
+                grid-template-columns: 1fr;
+            }
+
+            h1 {
+                letter-spacing: 4px;
+            }
         }
     </style>
 </head>
@@ -386,161 +452,182 @@
 <canvas id="matrix-bg"></canvas>
 
 <div class="container">
-    <!-- Эквалайзер -->
-    <div class="equalizer-wrapper">
-        <div class="eq-label">FREQUENCY_ANALYSIS</div>
-        <div class="eq-status" id="eqStatus">STANDBY</div>
-        <canvas id="equalizer"></canvas>
-    </div>
-
-    <h1>ТЁМНЫЙ РАЙОН</h1>
-    <div class="subtitle">// PROTOCOL_X_ZERO // DOCUMENTARY_MODE</div>
-
-    <!-- Обложка -->
-    <div class="cover-section">
-        <img src="cover.png" alt="Тёмный Район Cover">
-        <div class="cover-label">V.01 // BLUE_SMOKE // SINGLE_COVER</div>
-    </div>
-
-    <!-- Мета информация -->
-    <div class="track-meta">
-        <div class="meta-item">
-            <div class="meta-label">Темп</div>
-            <div class="meta-value">140 BPM</div>
-        </div>
-        <div class="meta-item">
-            <div class="meta-label">Тональность</div>
-            <div class="meta-value">C# Minor</div>
-        </div>
-        <div class="meta-item">
-            <div class="meta-label">Треков</div>
-            <div class="meta-value">2</div>
-        </div>
-    </div>
-
-    <!-- Треки -->
-    <div class="tracks-section">
-        <div class="tracks-title">/// TRACKLIST</div>
-
-        <div class="track-item" id="track1">
-            <div class="track-header">
-                <span class="track-number">[01]</span>
-                <span class="track-name">ТЁМНЫЙ РАЙОН</span>
-                <span class="track-duration">3:24</span>
-            </div>
-            <div class="track-player">
-                <audio controls id="audioPlayer1">
-                    <source src="rayony.m4a" type="audio/mp4">
-                    <source src="rayony.mp3" type="audio/mpeg">
-                </audio>
+    <!-- ГЛАВНЫЙ ЭКРАН -->
+    <section class="hero-section">
+        <!-- Обложка с эквалайзером -->
+        <div class="cover-wrapper">
+            <img src="cover.png" alt="Тёмный Район" class="cover-image">
+            <canvas id="equalizer-overlay"></canvas>
+            
+            <div class="cover-overlay-info">
+                <div class="status-badge" id="statusBadge">STANDBY</div>
+                <div class="status-badge" id="trackBadge">TRACK_01</div>
             </div>
         </div>
 
-        <div class="track-item" id="track2">
-            <div class="track-header">
-                <span class="track-number">[02]</span>
-                <span class="track-name">ТЁМНЫЙ РАЙОН (INSTRUMENTAL)</span>
-                <span class="track-duration">3:24</span>
+        <!-- Заголовок -->
+        <div class="title-container">
+            <h1>ТЁМНЫЙ РАЙОН</h1>
+            <div class="subtitle">// PROTOCOL_X_ZERO // DOCUMENTARY_MODE</div>
+        </div>
+
+        <!-- Треки -->
+        <div class="tracks-container">
+            <div class="track-card" id="track1Card">
+                <div class="track-header">
+                    <span class="track-number">[01]</span>
+                    <span class="track-name">Районы Мастер</span>
+                    <span class="track-duration">3:24</span>
+                </div>
+                <div class="track-player">
+                    <audio controls id="audioPlayer1">
+                        <source src="rayony.m4a" type="audio/mp4">
+                        <source src="rayony.mp3" type="audio/mpeg">
+                    </audio>
+                </div>
             </div>
-            <div class="track-player">
-                <audio controls id="audioPlayer2">
-                    <source src="rayony_inst.m4a" type="audio/mp4">
-                    <source src="rayony_inst.mp3" type="audio/mpeg">
-                </audio>
+
+            <div class="track-card" id="track2Card">
+                <div class="track-header">
+                    <span class="track-number">[02]</span>
+                    <span class="track-name">Районы</span>
+                    <span class="track-duration">3:24</span>
+                </div>
+                <div class="track-player">
+                    <audio controls id="audioPlayer2">
+                        <source src="rayony_inst.m4a" type="audio/mp4">
+                        <source src="rayony_inst.mp3" type="audio/mpeg">
+                    </audio>
+                </div>
             </div>
         </div>
-    </div>
+
+        <!-- Мета информация -->
+        <div class="meta-grid">
+            <div class="meta-item">
+                <div class="meta-label">ТЕМП</div>
+                <div class="meta-value">140 BPM</div>
+            </div>
+            <div class="meta-item">
+                <div class="meta-label">ТОНАЛЬНОСТЬ</div>
+                <div class="meta-value">C#m</div>
+            </div>
+            <div class="meta-item">
+                <div class="meta-label">ЖАНР</div>
+                <div class="meta-value">DARK</div>
+            </div>
+            <div class="meta-item">
+                <div class="meta-label">РЕЖИМ</div>
+                <div class="meta-value">X=0</div>
+            </div>
+        </div>
+    </section>
 
     <!-- Текст песни -->
-    <div class="lyrics-section">
-        <div class="lyrics-title">/// LYRICS_DATA // TRACK_01</div>
-        <div class="lyrics-content">
-            <div class="verse">
-                <span class="verse-label">[КУПЛЕТ_01]</span>
-                <span class="line">В тени бетонных стен, где свет не достаёт,</span>
-                <span class="line">Тут каждый второй знает, как судьба бьёт.</span>
-                <span class="line">Дым сигарет вперемешку с туманом,</span>
-                <span class="line">Мы идём по краю, сыты обманом.</span>
-                <span class="line">Холод по венам, взгляд ледяной,</span>
-                <span class="line">Этот город забрал мой покой.</span>
-                <span class="line">Скрежет металла, эхо шагов,</span>
-                <span class="line">Здесь выживает лишь тот, кто готов.</span>
-                <span class="line">Крутятся колёса, время бежит,</span>
-                <span class="line">Но мой район всё так же молчит.</span>
-                <span class="line">Чувствуешь дрожь — это бас или страх?</span>
-                <span class="line">Вся наша жизнь — это пыль на руках.</span>
-                <span class="line">Сгущаются тучи, пора делать ход,</span>
-                <span class="line">Смотри, как эта тьма идёт!</span>
-            </div>
+    <section class="lyrics-section">
+        <div class="lyrics-title">/// LYRICS_DATA</div>
 
-            <div class="verse chorus">
-                <span class="verse-label">[ПРИПЕВ]</span>
-                <span class="line">Это тёмный район, тут свои законы,</span>
-                <span class="line">Каждый шаг — риск, мимо летят патроны.</span>
-                <span class="line">Мы не просим пощады, мы берём своё,</span>
-                <span class="line">Тьма укрывает нас — это наше бытиё.</span>
-                <span class="line" style="margin-top: 15px;">(x2)</span>
-            </div>
-
-            <div class="verse">
-                <span class="verse-label">[КУПЛЕТ_02]</span>
-                <span class="line">Фонари горят тускло, как чьи-то надежды,</span>
-                <span class="line">Мы прячем глаза под капюшоны одежды.</span>
-                <span class="line">Тут фальшь не прощают, тут видят насквозь,</span>
-                <span class="line">Столько судеб разбилось, столько жизней врозь.</span>
-                <span class="line">Но мы держим строй, мы стоим до конца,</span>
-                <span class="line">Нет страха в глазах, нет дрожи с лица.</span>
-                <span class="line">Это дым и закон, наш вечный туман,</span>
-                <span class="line">Город грехов и сплошной обман.</span>
-                <span class="line">Слышишь этот шёпот? Он зовёт нас во тьму,</span>
-                <span class="line">Я не верю словам, я не верю ничему.</span>
-                <span class="line">Только то, что внутри, только то, что моё,</span>
-                <span class="line">Скоро этот огонь поглотит всё!</span>
-            </div>
-
-            <div class="verse">
-                <span class="verse-label">[АУТРО]</span>
-                <span class="line">Мы не просим пощады, мы берём своё,</span>
-                <span class="line">Тьма укрывает нас — это наше бытиё.</span>
-                <span class="line adlib" style="margin-top: 20px;">(Свой район...)</span>
-                <span class="line adlib">(Холод...)</span>
-                <span class="line adlib">(Система сломана...)</span>
-                <span class="line adlib">(Тёмный район...)</span>
-            </div>
+        <div class="verse-block" data-verse="1">
+            <div class="verse-label">[КУПЛЕТ_01]</div>
+            <div class="lyric-line">В тени бетонных стен, где свет не достаёт,</div>
+            <div class="lyric-line">Тут каждый второй знает, как судьба бьёт.</div>
+            <div class="lyric-line">Дым сигарет вперемешку с туманом,</div>
+            <div class="lyric-line">Мы идём по краю, сыты обманом.</div>
+            <div class="lyric-line">Холод по венам, взгляд ледяной,</div>
+            <div class="lyric-line">Этот город забрал мой покой.</div>
+            <div class="lyric-line">Скрежет металла, эхо шагов,</div>
+            <div class="lyric-line">Здесь выживает лишь тот, кто готов.</div>
+            <div class="lyric-line">Крутятся колёса, время бежит,</div>
+            <div class="lyric-line">Но мой район всё так же молчит.</div>
+            <div class="lyric-line">Чувствуешь дрожь — это бас или страх?</div>
+            <div class="lyric-line">Вся наша жизнь — это пыль на руках.</div>
+            <div class="lyric-line">Сгущаются тучи, пора делать ход,</div>
+            <div class="lyric-line">Смотри, как эта тьма идёт!</div>
         </div>
-    </div>
+
+        <div class="verse-block chorus" data-verse="2">
+            <div class="verse-label">[ПРИПЕВ]</div>
+            <div class="lyric-line">Это тёмный район, тут свои законы,</div>
+            <div class="lyric-line">Каждый шаг — риск, мимо летят патроны.</div>
+            <div class="lyric-line">Мы не просим пощады, мы берём своё,</div>
+            <div class="lyric-line">Тьма укрывает нас — это наше бытиё.</div>
+            <div class="lyric-line" style="margin-top: 15px; opacity: 0.6;">(x2)</div>
+        </div>
+
+        <div class="verse-block" data-verse="3">
+            <div class="verse-label">[КУПЛЕТ_02]</div>
+            <div class="lyric-line">Фонари горят тускло, как чьи-то надежды,</div>
+            <div class="lyric-line">Мы прячем глаза под капюшоны одежды.</div>
+            <div class="lyric-line">Тут фальшь не прощают, тут видят насквозь,</div>
+            <div class="lyric-line">Столько судеб разбилось, столько жизней врозь.</div>
+            <div class="lyric-line">Но мы держим строй, мы стоим до конца,</div>
+            <div class="lyric-line">Нет страха в глазах, нет дрожи с лица.</div>
+            <div class="lyric-line">Это дым и закон, наш вечный туман,</div>
+            <div class="lyric-line">Город грехов и сплошной обман.</div>
+            <div class="lyric-line">Слышишь этот шёпот? Он зовёт нас во тьму,</div>
+            <div class="lyric-line">Я не верю словам, я не верю ничему.</div>
+            <div class="lyric-line">Только то, что внутри, только то, что моё,</div>
+            <div class="lyric-line">Скоро этот огонь поглотит всё!</div>
+        </div>
+
+        <div class="verse-block" data-verse="4">
+            <div class="verse-label">[АУТРО]</div>
+            <div class="lyric-line">Мы не просим пощады, мы берём своё,</div>
+            <div class="lyric-line">Тьма укрывает нас — это наше бытиё.</div>
+            <div class="lyric-line adlib-line" style="margin-top: 20px;">(Свой район...)</div>
+            <div class="lyric-line adlib-line">(Холод...)</div>
+            <div class="lyric-line adlib-line">(Система сломана...)</div>
+            <div class="lyric-line adlib-line">(Тёмный район...)</div>
+        </div>
+    </section>
 
     <!-- Эдлибы -->
-    <div class="adlibs-bonus">
+    <section class="adlibs-section">
         <div class="adlibs-title">/// AUDIO_LAYERS // ADLIBS_BONUS</div>
-        <div style="margin-bottom: 15px; color: #444; font-size: 0.8rem;">ATMOSPHERE:</div>
-        <span class="adlib-tag">Свой район...</span>
-        <span class="adlib-tag">Холод...</span>
-        <span class="adlib-tag">Пустота...</span>
-        <span class="adlib-tag">Бетон...</span>
-        <span class="adlib-tag">Дым...</span>
-        <span class="adlib-tag">Ночь...</span>
-        
-        <div style="margin: 20px 0 15px 0; color: #444; font-size: 0.8rem;">RHYTHM:</div>
-        <span class="adlib-tag">Па-па!</span>
-        <span class="adlib-tag">Ту-ту!</span>
-        <span class="adlib-tag">Эй!</span>
-        <span class="adlib-tag">Воу!</span>
-        <span class="adlib-tag">Чек-чек!</span>
-        <span class="adlib-tag">Грр-ра!</span>
-        
-        <div style="margin: 20px 0 15px 0; color: #444; font-size: 0.8rem;">MEANING:</div>
-        <span class="adlib-tag">Свои!</span>
-        <span class="adlib-tag">На связи!</span>
-        <span class="adlib-tag">Реально!</span>
-        <span class="adlib-tag">Без фейков!</span>
-        <span class="adlib-tag">Только правда!</span>
-        <span class="adlib-tag">Здесь!</span>
-    </div>
+
+        <div class="adlib-category">
+            <div class="category-label">ATMOSPHERE:</div>
+            <div class="adlib-tags">
+                <span class="adlib-tag">Свой район...</span>
+                <span class="adlib-tag">Холод...</span>
+                <span class="adlib-tag">Пустота...</span>
+                <span class="adlib-tag">Бетон...</span>
+                <span class="adlib-tag">Дым...</span>
+                <span class="adlib-tag">Ночь...</span>
+            </div>
+        </div>
+
+        <div class="adlib-category">
+            <div class="category-label">RHYTHM:</div>
+            <div class="adlib-tags">
+                <span class="adlib-tag">Па-па!</span>
+                <span class="adlib-tag">Ту-ту!</span>
+                <span class="adlib-tag">Эй!</span>
+                <span class="adlib-tag">Воу!</span>
+                <span class="adlib-tag">Чек-чек!</span>
+                <span class="adlib-tag">Грр-ра!</span>
+            </div>
+        </div>
+
+        <div class="adlib-category">
+            <div class="category-label">MEANING:</div>
+            <div class="adlib-tags">
+                <span class="adlib-tag">Свои!</span>
+                <span class="adlib-tag">На связи!</span>
+                <span class="adlib-tag">Реально!</span>
+                <span class="adlib-tag">Без фейков!</span>
+                <span class="adlib-tag">Только правда!</span>
+                <span class="adlib-tag">Здесь!</span>
+            </div>
+        </div>
+    </section>
 
     <footer>
-        PROTOCOL_X_ZERO // 2024<br>
-        NO_EXPECTATIONS // JUST_REALITY
+        <div class="footer-text">
+            PROTOCOL_X_ZERO // 2024<br>
+            NO_EXPECTATIONS // JUST_REALITY<br>
+            ТЁМНЫЙ РАЙОН
+        </div>
     </footer>
 </div>
 
@@ -552,7 +639,7 @@
     matrixCanvas.width = window.innerWidth;
     matrixCanvas.height = window.innerHeight;
     
-    const chars = 'アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン0123456789';
+    const chars = 'アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン0123456789ABCDEF';
     const charArray = chars.split('');
     const fontSize = 14;
     const columns = matrixCanvas.width / fontSize;
@@ -587,15 +674,16 @@
         matrixCanvas.height = window.innerHeight;
     });
     
-    // ЭКВАЛАЙЗЕР (работает с двумя плеерами)
-    const eqCanvas = document.getElementById('equalizer');
+    // ЭКВАЛАЙЗЕР НА ОБЛОЖКЕ
+    const eqCanvas = document.getElementById('equalizer-overlay');
     const eqCtx = eqCanvas.getContext('2d');
-    const eqStatus = document.getElementById('eqStatus');
+    const statusBadge = document.getElementById('statusBadge');
+    const trackBadge = document.getElementById('trackBadge');
     
     const audio1 = document.getElementById('audioPlayer1');
     const audio2 = document.getElementById('audioPlayer2');
-    const track1El = document.getElementById('track1');
-    const track2El = document.getElementById('track2');
+    const track1Card = document.getElementById('track1Card');
+    const track2Card = document.getElementById('track2Card');
     
     let audioContext = null;
     let analyser = null;
@@ -603,12 +691,12 @@
     let bufferLength = 0;
     let isInitialized = false;
     let initFailed = false;
-    let activeSource = null;
+    let activeAudio = null;
     
     function resizeEqCanvas() {
         const wrapper = eqCanvas.parentElement;
         eqCanvas.width = wrapper.clientWidth;
-        eqCanvas.height = wrapper.clientHeight;
+        eqCanvas.height = wrapper.clientHeight * 0.4;
     }
     
     resizeEqCanvas();
@@ -616,13 +704,11 @@
     
     function initAudioContext(audioElement) {
         if (isInitialized) {
-            // Если уже инициализирован, переподключаем к новому источнику
-            if (activeSource !== audioElement) {
+            if (activeAudio !== audioElement) {
                 try {
                     const newSource = audioContext.createMediaElementSource(audioElement);
                     newSource.connect(analyser);
-                    analyser.connect(audioContext.destination);
-                    activeSource = audioElement;
+                    activeAudio = audioElement;
                 } catch (e) {
                     console.warn('Reconnect failed:', e);
                 }
@@ -642,7 +728,7 @@
             audioContext = new AudioContext();
             analyser = audioContext.createAnalyser();
             analyser.fftSize = 256;
-            analyser.smoothingTimeConstant = 0.8;
+            analyser.smoothingTimeConstant = 0.85;
             
             bufferLength = analyser.frequencyBinCount;
             dataArray = new Uint8Array(bufferLength);
@@ -650,7 +736,7 @@
             const source = audioContext.createMediaElementSource(audioElement);
             source.connect(analyser);
             analyser.connect(audioContext.destination);
-            activeSource = audioElement;
+            activeAudio = audioElement;
             
             isInitialized = true;
         } catch (e) {
@@ -665,38 +751,24 @@
         const width = eqCanvas.width;
         const height = eqCanvas.height;
         
-        eqCtx.fillStyle = 'rgba(0, 0, 0, 0.3)';
-        eqCtx.fillRect(0, 0, width, height);
+        eqCtx.clearRect(0, 0, width, height);
         
-        eqCtx.strokeStyle = 'rgba(0, 255, 65, 0.08)';
-        eqCtx.lineWidth = 1;
-        for (let i = 0; i < width; i += 20) {
-            eqCtx.beginPath();
-            eqCtx.moveTo(i, 0);
-            eqCtx.lineTo(i, height);
-            eqCtx.stroke();
-        }
-        for (let i = 0; i < height; i += 20) {
-            eqCtx.beginPath();
-            eqCtx.moveTo(0, i);
-            eqCtx.lineTo(width, i);
-            eqCtx.stroke();
-        }
-        
-        const activeAudio = audio1.paused ? (audio2.paused ? null : audio2) : audio1;
-        
-        if (!activeAudio) {
-            // Режим ожидания
-            const barCount = 64;
+        if (!activeAudio || activeAudio.paused) {
+            // Режим ожидания - лёгкая волна
+            const barCount = 48;
             const barWidth = width / barCount;
             const time = Date.now() / 1000;
             
             for (let i = 0; i < barCount; i++) {
-                const barHeight = 8 + Math.sin(time * 2 + i * 0.3) * 4;
+                const barHeight = 5 + Math.sin(time * 1.5 + i * 0.2) * 3;
                 const x = i * barWidth;
                 const y = height - barHeight;
                 
-                eqCtx.fillStyle = '#003b00';
+                const gradient = eqCtx.createLinearGradient(0, y, 0, height);
+                gradient.addColorStop(0, 'rgba(0, 255, 65, 0.3)');
+                gradient.addColorStop(1, 'rgba(0, 255, 65, 0.1)');
+                
+                eqCtx.fillStyle = gradient;
                 eqCtx.fillRect(x, y, barWidth - 2, barHeight);
             }
             return;
@@ -704,19 +776,20 @@
         
         if (initFailed || !analyser) {
             // Fallback
-            const barCount = 64;
+            const barCount = 48;
             const barWidth = width / barCount;
             const time = activeAudio.currentTime;
             
             for (let i = 0; i < barCount; i++) {
-                const pseudoValue = Math.abs(Math.sin(time * 3 + i * 0.5)) * 0.7 + Math.random() * 0.3;
-                const barHeight = pseudoValue * height * 0.8;
+                const pseudoValue = Math.abs(Math.sin(time * 2 + i * 0.4)) * 0.6 + Math.random() * 0.4;
+                const barHeight = pseudoValue * height;
                 const x = i * barWidth;
                 const y = height - barHeight;
                 
                 const gradient = eqCtx.createLinearGradient(0, y, 0, height);
-                gradient.addColorStop(0, '#00ff41');
-                gradient.addColorStop(1, '#003b00');
+                gradient.addColorStop(0, 'rgba(0, 255, 65, 0.8)');
+                gradient.addColorStop(1, 'rgba(0, 255, 65, 0.2)');
+                
                 eqCtx.fillStyle = gradient;
                 eqCtx.fillRect(x, y, barWidth - 2, barHeight);
             }
@@ -733,17 +806,12 @@
             const y = height - barHeight;
             
             const gradient = eqCtx.createLinearGradient(0, y, 0, height);
-            gradient.addColorStop(0, '#00ff41');
-            gradient.addColorStop(0.5, '#00cc33');
-            gradient.addColorStop(1, '#003b00');
+            gradient.addColorStop(0, 'rgba(0, 255, 65, 0.9)');
+            gradient.addColorStop(0.5, 'rgba(0, 212, 255, 0.6)');
+            gradient.addColorStop(1, 'rgba(0, 255, 65, 0.2)');
             
             eqCtx.fillStyle = gradient;
             eqCtx.fillRect(x, y, barWidth - 1, barHeight);
-            
-            eqCtx.shadowBlur = 8;
-            eqCtx.shadowColor = '#00ff41';
-            eqCtx.fillRect(x, y, barWidth - 1, 2);
-            eqCtx.shadowBlur = 0;
             
             x += barWidth;
         }
@@ -751,73 +819,83 @@
     
     drawEqualizer();
     
-    // Обработчики для первого плеера
-    audio1.addEventListener('play', () => {
-        if (!isInitialized && !initFailed) {
-            initAudioContext(audio1);
-        }
-        if (audioContext && audioContext.state === 'suspended') {
-            audioContext.resume();
-        }
-        // Останавливаем второй если играет
-        if (!audio2.paused) audio2.pause();
+    // Обработчики плееров
+    function setupPlayer(audio, card, trackNum) {
+        audio.addEventListener('play', () => {
+            if (!isInitialized && !initFailed) {
+                initAudioContext(audio);
+            }
+            if (audioContext && audioContext.state === 'suspended') {
+                audioContext.resume();
+            }
+            
+            // Останавливаем другой плеер
+            const otherAudio = audio === audio1 ? audio2 : audio1;
+            const otherCard = audio === audio1 ? track2Card : track1Card;
+            
+            if (!otherAudio.paused) {
+                otherAudio.pause();
+                otherCard.classList.remove('active');
+            }
+            
+            activeAudio = audio;
+            card.classList.add('active');
+            statusBadge.textContent = 'PLAYING';
+            statusBadge.classList.add('active');
+            trackBadge.textContent = `TRACK_0${trackNum}`;
+        });
         
-        track1El.classList.add('playing');
-        track2El.classList.remove('playing');
-        eqStatus.textContent = 'TRACK_01 // ANALYZING...';
-        eqStatus.classList.add('active');
-    });
-    
-    audio1.addEventListener('pause', () => {
-        track1El.classList.remove('playing');
-        if (audio2.paused) {
-            eqStatus.textContent = 'STANDBY';
-            eqStatus.classList.remove('active');
-        }
-    });
-    
-    audio1.addEventListener('ended', () => {
-        track1El.classList.remove('playing');
-        if (audio2.paused) {
-            eqStatus.textContent = 'COMPLETE';
-            eqStatus.classList.remove('active');
-        }
-    });
-    
-    // Обработчики для второго плеера
-    audio2.addEventListener('play', () => {
-        if (!isInitialized && !initFailed) {
-            initAudioContext(audio2);
-        }
-        if (audioContext && audioContext.state === 'suspended') {
-            audioContext.resume();
-        }
-        // Останавливаем первый если играет
-        if (!audio1.paused) audio1.pause();
+        audio.addEventListener('pause', () => {
+            card.classList.remove('active');
+            if (audio1.paused && audio2.paused) {
+                activeAudio = null;
+                statusBadge.textContent = 'PAUSED';
+                statusBadge.classList.remove('active');
+            }
+        });
         
-        track2El.classList.add('playing');
-        track1El.classList.remove('playing');
-        eqStatus.textContent = 'TRACK_02 // ANALYZING...';
-        eqStatus.classList.add('active');
+        audio.addEventListener('ended', () => {
+            card.classList.remove('active');
+            if (audio1.paused && audio2.paused) {
+                activeAudio = null;
+                statusBadge.textContent = 'COMPLETE';
+                statusBadge.classList.remove('active');
+            }
+        });
+    }
+    
+    setupPlayer(audio1, track1Card, 1);
+    setupPlayer(audio2, track2Card, 2);
+    
+    // Анимация выдвижения текста при скролле
+    const verseBlocks = document.querySelectorAll('.verse-block');
+    
+    const observerOptions = {
+        threshold: 0.2,
+        rootMargin: '0px 0px -100px 0px'
+    };
+    
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+                
+                // Анимация строк с задержкой
+                const lines = entry.target.querySelectorAll('.lyric-line');
+                lines.forEach((line, index) => {
+                    setTimeout(() => {
+                        line.style.transitionDelay = `${index * 0.05}s`;
+                    }, 100);
+                });
+            }
+        });
+    }, observerOptions);
+    
+    verseBlocks.forEach(block => {
+        observer.observe(block);
     });
     
-    audio2.addEventListener('pause', () => {
-        track2El.classList.remove('playing');
-        if (audio1.paused) {
-            eqStatus.textContent = 'STANDBY';
-            eqStatus.classList.remove('active');
-        }
-    });
-    
-    audio2.addEventListener('ended', () => {
-        track2El.classList.remove('playing');
-        if (audio1.paused) {
-            eqStatus.textContent = 'COMPLETE';
-            eqStatus.classList.remove('active');
-        }
-    });
-    
-    // Эффект печатной машинки
+    // Эффект печатной машинки для заголовка
     const title = document.querySelector('h1');
     const originalText = title.textContent;
     title.textContent = '';
@@ -831,8 +909,8 @@
             } else {
                 clearInterval(typeWriter);
             }
-        }, 100);
-    }, 500);
+        }, 120);
+    }, 800);
 </script>
 
 </body>
