@@ -29,7 +29,6 @@
             position: relative;
         }
 
-        /* Матричный фон */
         #matrix-bg {
             position: fixed;
             top: 0;
@@ -48,7 +47,6 @@
             padding: 0 20px;
         }
 
-        /* ГЛАВНЫЙ ЭКРАН С ОБЛОЖКОЙ И ЭКВАЛАЙЗЕРОМ */
         .hero-section {
             min-height: 100vh;
             display: flex;
@@ -78,7 +76,6 @@
             filter: contrast(1.2) brightness(0.85);
         }
 
-        /* Эквалайзер поверх обложки */
         #equalizer-overlay {
             position: absolute;
             bottom: 0;
@@ -121,7 +118,6 @@
             50% { box-shadow: 0 0 20px var(--neon-green), 0 0 30px var(--neon-green); }
         }
 
-        /* Заголовок с глитчем */
         .title-container {
             text-align: center;
             margin-bottom: 30px;
@@ -157,7 +153,6 @@
             opacity: 0.8;
         }
 
-        /* Треки */
         .tracks-container {
             width: 100%;
             max-width: 600px;
@@ -235,7 +230,6 @@
             outline: none;
         }
 
-        /* Мета информация */
         .meta-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
@@ -273,7 +267,6 @@
             color: var(--neon-green);
         }
 
-        /* Текст песни с анимацией выдвижения */
         .lyrics-section {
             padding: 80px 20px;
             max-width: 800px;
@@ -347,7 +340,6 @@
             font-size: 0.95rem;
         }
 
-        /* Эдлибы бонус */
         .adlibs-section {
             padding: 60px 20px;
             max-width: 800px;
@@ -399,7 +391,6 @@
             box-shadow: 0 0 20px var(--neon-green);
         }
 
-        /* Footer */
         footer {
             text-align: center;
             padding: 60px 20px;
@@ -415,7 +406,6 @@
             line-height: 2;
         }
 
-        /* Адаптивность */
         @media (max-width: 768px) {
             .cover-wrapper {
                 max-width: 100%;
@@ -452,11 +442,9 @@
 <canvas id="matrix-bg"></canvas>
 
 <div class="container">
-    <!-- ГЛАВНЫЙ ЭКРАН -->
     <section class="hero-section">
-        <!-- Обложка с эквалайзером -->
         <div class="cover-wrapper">
-            <img src="cover.png" alt="Тёмный Район" class="cover-image">
+            <img src="cover.jpg" alt="Тёмный Район" class="cover-image">
             <canvas id="equalizer-overlay"></canvas>
             
             <div class="cover-overlay-info">
@@ -465,13 +453,11 @@
             </div>
         </div>
 
-        <!-- Заголовок -->
         <div class="title-container">
             <h1>ТЁМНЫЙ РАЙОН</h1>
             <div class="subtitle">// PROTOCOL_X_ZERO // DOCUMENTARY_MODE</div>
         </div>
 
-        <!-- Треки -->
         <div class="tracks-container">
             <div class="track-card" id="track1Card">
                 <div class="track-header">
@@ -481,8 +467,7 @@
                 </div>
                 <div class="track-player">
                     <audio controls id="audioPlayer1">
-                        <source src="rayony.m4a" type="audio/mp4">
-                        <source src="rayony.mp3" type="audio/mpeg">
+                        <source src="rayony_master.m4a" type="audio/mp4">
                     </audio>
                 </div>
             </div>
@@ -495,14 +480,12 @@
                 </div>
                 <div class="track-player">
                     <audio controls id="audioPlayer2">
-                        <source src="rayony_inst.m4a" type="audio/mp4">
-                        <source src="rayony_inst.mp3" type="audio/mpeg">
+                        <source src="rayony.m4a" type="audio/mp4">
                     </audio>
                 </div>
             </div>
         </div>
 
-        <!-- Мета информация -->
         <div class="meta-grid">
             <div class="meta-item">
                 <div class="meta-label">ТЕМП</div>
@@ -523,7 +506,6 @@
         </div>
     </section>
 
-    <!-- Текст песни -->
     <section class="lyrics-section">
         <div class="lyrics-title">/// LYRICS_DATA</div>
 
@@ -581,7 +563,6 @@
         </div>
     </section>
 
-    <!-- Эдлибы -->
     <section class="adlibs-section">
         <div class="adlibs-title">/// AUDIO_LAYERS // ADLIBS_BONUS</div>
 
@@ -632,7 +613,6 @@
 </div>
 
 <script>
-    // МАТРИЧНЫЙ ФОН
     const matrixCanvas = document.getElementById('matrix-bg');
     const matrixCtx = matrixCanvas.getContext('2d');
     
@@ -674,7 +654,6 @@
         matrixCanvas.height = window.innerHeight;
     });
     
-    // ЭКВАЛАЙЗЕР НА ОБЛОЖКЕ
     const eqCanvas = document.getElementById('equalizer-overlay');
     const eqCtx = eqCanvas.getContext('2d');
     const statusBadge = document.getElementById('statusBadge');
@@ -754,7 +733,6 @@
         eqCtx.clearRect(0, 0, width, height);
         
         if (!activeAudio || activeAudio.paused) {
-            // Режим ожидания - лёгкая волна
             const barCount = 48;
             const barWidth = width / barCount;
             const time = Date.now() / 1000;
@@ -775,7 +753,6 @@
         }
         
         if (initFailed || !analyser) {
-            // Fallback
             const barCount = 48;
             const barWidth = width / barCount;
             const time = activeAudio.currentTime;
@@ -819,7 +796,6 @@
     
     drawEqualizer();
     
-    // Обработчики плееров
     function setupPlayer(audio, card, trackNum) {
         audio.addEventListener('play', () => {
             if (!isInitialized && !initFailed) {
@@ -829,7 +805,6 @@
                 audioContext.resume();
             }
             
-            // Останавливаем другой плеер
             const otherAudio = audio === audio1 ? audio2 : audio1;
             const otherCard = audio === audio1 ? track2Card : track1Card;
             
@@ -867,7 +842,6 @@
     setupPlayer(audio1, track1Card, 1);
     setupPlayer(audio2, track2Card, 2);
     
-    // Анимация выдвижения текста при скролле
     const verseBlocks = document.querySelectorAll('.verse-block');
     
     const observerOptions = {
@@ -880,7 +854,6 @@
             if (entry.isIntersecting) {
                 entry.target.classList.add('visible');
                 
-                // Анимация строк с задержкой
                 const lines = entry.target.querySelectorAll('.lyric-line');
                 lines.forEach((line, index) => {
                     setTimeout(() => {
@@ -895,7 +868,6 @@
         observer.observe(block);
     });
     
-    // Эффект печатной машинки для заголовка
     const title = document.querySelector('h1');
     const originalText = title.textContent;
     title.textContent = '';
