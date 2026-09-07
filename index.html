@@ -115,6 +115,99 @@
             letter-spacing: 3px;
         }
 
+        /* Обложка */
+        .cover-section {
+            margin-bottom: 40px;
+            border: 1px solid var(--border);
+            background: var(--secondary);
+            overflow: hidden;
+            box-shadow: 0 0 40px rgba(0, 255, 65, 0.1);
+        }
+
+        .cover-section img {
+            width: 100%;
+            height: auto;
+            display: block;
+            filter: contrast(1.15) brightness(0.95);
+        }
+
+        .cover-label {
+            text-align: center;
+            padding: 15px;
+            color: var(--matrix-dim);
+            font-size: 0.85rem;
+            letter-spacing: 3px;
+            border-top: 1px solid var(--border);
+        }
+
+        /* Треки */
+        .tracks-section {
+            margin-bottom: 50px;
+        }
+
+        .tracks-title {
+            text-align: center;
+            margin-bottom: 25px;
+            color: var(--matrix-dim);
+            font-size: 0.9rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+        }
+
+        .track-item {
+            background: var(--secondary);
+            border: 1px solid var(--border);
+            margin-bottom: 20px;
+            transition: all 0.3s;
+        }
+
+        .track-item:hover {
+            border-color: var(--matrix-dark);
+            box-shadow: 0 0 20px rgba(0, 255, 65, 0.1);
+        }
+
+        .track-item.playing {
+            border-color: var(--matrix-green);
+            box-shadow: 0 0 30px rgba(0, 255, 65, 0.2);
+        }
+
+        .track-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .track-number {
+            color: var(--matrix-dark);
+            font-size: 0.8rem;
+            letter-spacing: 2px;
+        }
+
+        .track-name {
+            color: var(--matrix-green);
+            font-size: 1.1rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .track-duration {
+            color: var(--matrix-dim);
+            font-size: 0.85rem;
+        }
+
+        .track-player {
+            padding: 15px 20px;
+        }
+
+        audio {
+            width: 100%;
+            filter: invert(1) hue-rotate(180deg);
+            outline: none;
+        }
+
+        /* Мета информация */
         .track-meta {
             display: flex;
             justify-content: center;
@@ -144,72 +237,7 @@
             margin-top: 5px;
         }
 
-        .player-wrapper {
-            margin-bottom: 50px;
-            padding: 20px;
-            background: var(--secondary);
-            border: 1px solid var(--border);
-        }
-
-        audio {
-            width: 100%;
-            filter: invert(1) hue-rotate(180deg);
-        }
-
-        .gallery {
-            margin: 50px 0;
-        }
-
-        .gallery-title {
-            text-align: center;
-            margin-bottom: 30px;
-            color: var(--matrix-dim);
-            font-size: 0.9rem;
-            letter-spacing: 4px;
-            text-transform: uppercase;
-        }
-
-        .covers-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 25px;
-        }
-
-        .cover-card {
-            border: 1px solid var(--border);
-            background: var(--secondary);
-            overflow: hidden;
-            transition: all 0.4s ease;
-            position: relative;
-        }
-
-        .cover-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 10px 40px rgba(0, 255, 65, 0.25);
-            border-color: var(--matrix-dark);
-        }
-
-        .cover-card img {
-            width: 100%;
-            height: 280px;
-            object-fit: cover;
-            filter: contrast(1.15) brightness(0.9);
-            transition: filter 0.3s;
-        }
-
-        .cover-card:hover img {
-            filter: contrast(1.2) brightness(1);
-        }
-
-        .cover-version {
-            text-align: center;
-            padding: 15px;
-            color: var(--matrix-dim);
-            font-size: 0.85rem;
-            letter-spacing: 2px;
-            border-top: 1px solid var(--border);
-        }
-
+        /* Текст песни */
         .lyrics-section {
             margin: 60px 0;
             padding: 40px;
@@ -348,8 +376,8 @@
             h1 { font-size: 2rem; letter-spacing: 4px; }
             .track-meta { gap: 20px; }
             .lyrics-section { padding: 25px; }
-            .covers-grid { grid-template-columns: 1fr; }
             .equalizer-wrapper { height: 180px; }
+            .track-header { flex-direction: column; gap: 8px; align-items: flex-start; }
         }
     </style>
 </head>
@@ -358,6 +386,7 @@
 <canvas id="matrix-bg"></canvas>
 
 <div class="container">
+    <!-- Эквалайзер -->
     <div class="equalizer-wrapper">
         <div class="eq-label">FREQUENCY_ANALYSIS</div>
         <div class="eq-status" id="eqStatus">STANDBY</div>
@@ -367,6 +396,13 @@
     <h1>ТЁМНЫЙ РАЙОН</h1>
     <div class="subtitle">// PROTOCOL_X_ZERO // DOCUMENTARY_MODE</div>
 
+    <!-- Обложка -->
+    <div class="cover-section">
+        <img src="cover.png" alt="Тёмный Район Cover">
+        <div class="cover-label">V.01 // BLUE_SMOKE // SINGLE_COVER</div>
+    </div>
+
+    <!-- Мета информация -->
     <div class="track-meta">
         <div class="meta-item">
             <div class="meta-label">Темп</div>
@@ -377,38 +413,47 @@
             <div class="meta-value">C# Minor</div>
         </div>
         <div class="meta-item">
-            <div class="meta-label">Длительность</div>
-            <div class="meta-value">3:24</div>
+            <div class="meta-label">Треков</div>
+            <div class="meta-value">2</div>
         </div>
     </div>
 
-    <div class="player-wrapper">
-        <audio controls id="audioPlayer">
-            <source src="rayony.m4a" type="audio/mp4">
-            <source src="rayony.mp3" type="audio/mpeg">
-        </audio>
-    </div>
+    <!-- Треки -->
+    <div class="tracks-section">
+        <div class="tracks-title">/// TRACKLIST</div>
 
-    <div class="gallery">
-        <div class="gallery-title">/// VISUAL_VERSIONS</div>
-        <div class="covers-grid">
-            <div class="cover-card">
-                <img src="cover.png" alt="Version 1">
-                <div class="cover-version">V.01 // BLUE_SMOKE</div>
+        <div class="track-item" id="track1">
+            <div class="track-header">
+                <span class="track-number">[01]</span>
+                <span class="track-name">ТЁМНЫЙ РАЙОН</span>
+                <span class="track-duration">3:24</span>
             </div>
-            <div class="cover-card">
-                <img src="cover_wave.png" alt="Version 2">
-                <div class="cover-version">V.02 // DIGITAL_WAVE</div>
+            <div class="track-player">
+                <audio controls id="audioPlayer1">
+                    <source src="rayony.m4a" type="audio/mp4">
+                    <source src="rayony.mp3" type="audio/mpeg">
+                </audio>
             </div>
-            <div class="cover-card">
-                <img src="cover_glitch.png" alt="Version 3">
-                <div class="cover-version">V.03 // SYSTEM_BROKEN</div>
+        </div>
+
+        <div class="track-item" id="track2">
+            <div class="track-header">
+                <span class="track-number">[02]</span>
+                <span class="track-name">ТЁМНЫЙ РАЙОН (INSTRUMENTAL)</span>
+                <span class="track-duration">3:24</span>
+            </div>
+            <div class="track-player">
+                <audio controls id="audioPlayer2">
+                    <source src="rayony_inst.m4a" type="audio/mp4">
+                    <source src="rayony_inst.mp3" type="audio/mpeg">
+                </audio>
             </div>
         </div>
     </div>
 
+    <!-- Текст песни -->
     <div class="lyrics-section">
-        <div class="lyrics-title">/// LYRICS_DATA</div>
+        <div class="lyrics-title">/// LYRICS_DATA // TRACK_01</div>
         <div class="lyrics-content">
             <div class="verse">
                 <span class="verse-label">[КУПЛЕТ_01]</span>
@@ -465,6 +510,7 @@
         </div>
     </div>
 
+    <!-- Эдлибы -->
     <div class="adlibs-bonus">
         <div class="adlibs-title">/// AUDIO_LAYERS // ADLIBS_BONUS</div>
         <div style="margin-bottom: 15px; color: #444; font-size: 0.8rem;">ATMOSPHERE:</div>
@@ -541,11 +587,15 @@
         matrixCanvas.height = window.innerHeight;
     });
     
-    // ЭКВАЛАЙЗЕР
-    const audio = document.getElementById('audioPlayer');
+    // ЭКВАЛАЙЗЕР (работает с двумя плеерами)
     const eqCanvas = document.getElementById('equalizer');
     const eqCtx = eqCanvas.getContext('2d');
     const eqStatus = document.getElementById('eqStatus');
+    
+    const audio1 = document.getElementById('audioPlayer1');
+    const audio2 = document.getElementById('audioPlayer2');
+    const track1El = document.getElementById('track1');
+    const track2El = document.getElementById('track2');
     
     let audioContext = null;
     let analyser = null;
@@ -553,6 +603,7 @@
     let bufferLength = 0;
     let isInitialized = false;
     let initFailed = false;
+    let activeSource = null;
     
     function resizeEqCanvas() {
         const wrapper = eqCanvas.parentElement;
@@ -563,8 +614,23 @@
     resizeEqCanvas();
     window.addEventListener('resize', resizeEqCanvas);
     
-    function initAudioContext() {
-        if (isInitialized || initFailed) return;
+    function initAudioContext(audioElement) {
+        if (isInitialized) {
+            // Если уже инициализирован, переподключаем к новому источнику
+            if (activeSource !== audioElement) {
+                try {
+                    const newSource = audioContext.createMediaElementSource(audioElement);
+                    newSource.connect(analyser);
+                    analyser.connect(audioContext.destination);
+                    activeSource = audioElement;
+                } catch (e) {
+                    console.warn('Reconnect failed:', e);
+                }
+            }
+            return;
+        }
+        
+        if (initFailed) return;
         
         try {
             const AudioContext = window.AudioContext || window.webkitAudioContext;
@@ -581,9 +647,10 @@
             bufferLength = analyser.frequencyBinCount;
             dataArray = new Uint8Array(bufferLength);
             
-            const source = audioContext.createMediaElementSource(audio);
+            const source = audioContext.createMediaElementSource(audioElement);
             source.connect(analyser);
             analyser.connect(audioContext.destination);
+            activeSource = audioElement;
             
             isInitialized = true;
         } catch (e) {
@@ -616,7 +683,10 @@
             eqCtx.stroke();
         }
         
-        if (!isInitialized || audio.paused) {
+        const activeAudio = audio1.paused ? (audio2.paused ? null : audio2) : audio1;
+        
+        if (!activeAudio) {
+            // Режим ожидания
             const barCount = 64;
             const barWidth = width / barCount;
             const time = Date.now() / 1000;
@@ -633,9 +703,10 @@
         }
         
         if (initFailed || !analyser) {
+            // Fallback
             const barCount = 64;
             const barWidth = width / barCount;
-            const time = audio.currentTime;
+            const time = activeAudio.currentTime;
             
             for (let i = 0; i < barCount; i++) {
                 const pseudoValue = Math.abs(Math.sin(time * 3 + i * 0.5)) * 0.7 + Math.random() * 0.3;
@@ -680,35 +751,73 @@
     
     drawEqualizer();
     
-    audio.addEventListener('play', () => {
+    // Обработчики для первого плеера
+    audio1.addEventListener('play', () => {
         if (!isInitialized && !initFailed) {
-            initAudioContext();
+            initAudioContext(audio1);
         }
-        
         if (audioContext && audioContext.state === 'suspended') {
             audioContext.resume();
         }
+        // Останавливаем второй если играет
+        if (!audio2.paused) audio2.pause();
         
-        eqStatus.textContent = 'ANALYZING...';
+        track1El.classList.add('playing');
+        track2El.classList.remove('playing');
+        eqStatus.textContent = 'TRACK_01 // ANALYZING...';
         eqStatus.classList.add('active');
     });
     
-    audio.addEventListener('pause', () => {
-        eqStatus.textContent = 'STANDBY';
-        eqStatus.classList.remove('active');
+    audio1.addEventListener('pause', () => {
+        track1El.classList.remove('playing');
+        if (audio2.paused) {
+            eqStatus.textContent = 'STANDBY';
+            eqStatus.classList.remove('active');
+        }
     });
     
-    audio.addEventListener('ended', () => {
-        eqStatus.textContent = 'COMPLETE';
-        eqStatus.classList.remove('active');
+    audio1.addEventListener('ended', () => {
+        track1El.classList.remove('playing');
+        if (audio2.paused) {
+            eqStatus.textContent = 'COMPLETE';
+            eqStatus.classList.remove('active');
+        }
     });
     
-    audio.addEventListener('error', (e) => {
-        console.error('Audio error:', e);
-        eqStatus.textContent = 'ERROR';
+    // Обработчики для второго плеера
+    audio2.addEventListener('play', () => {
+        if (!isInitialized && !initFailed) {
+            initAudioContext(audio2);
+        }
+        if (audioContext && audioContext.state === 'suspended') {
+            audioContext.resume();
+        }
+        // Останавливаем первый если играет
+        if (!audio1.paused) audio1.pause();
+        
+        track2El.classList.add('playing');
+        track1El.classList.remove('playing');
+        eqStatus.textContent = 'TRACK_02 // ANALYZING...';
+        eqStatus.classList.add('active');
     });
     
-    // ЭФФЕКТ ПЕЧАТНОЙ МАШИНКИ
+    audio2.addEventListener('pause', () => {
+        track2El.classList.remove('playing');
+        if (audio1.paused) {
+            eqStatus.textContent = 'STANDBY';
+            eqStatus.classList.remove('active');
+        }
+    });
+    
+    audio2.addEventListener('ended', () => {
+        track2El.classList.remove('playing');
+        if (audio1.paused) {
+            eqStatus.textContent = 'COMPLETE';
+            eqStatus.classList.remove('active');
+        }
+    });
+    
+    // Эффект печатной машинки
     const title = document.querySelector('h1');
     const originalText = title.textContent;
     title.textContent = '';
