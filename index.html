@@ -49,6 +49,7 @@
             overflow: hidden;
             margin-bottom: 25px;
             cursor: pointer;
+            background: #111;
         }
 
         .cover-image {
@@ -56,6 +57,9 @@
             object-fit: cover;
             filter: contrast(1.15) brightness(0.9);
             transition: filter 0.3s;
+            position: relative;
+            z-index: 2;
+            display: block;
         }
 
         .cover-wrapper:hover .cover-image {
@@ -67,6 +71,7 @@
             bottom: 0; left: 0;
             width: 100%; height: 35%;
             pointer-events: none;
+            z-index: 3;
         }
 
         /* Большая кнопка Play по центру */
@@ -461,7 +466,7 @@
 <div class="container">
     <!-- Обложка с кнопкой Play -->
     <div class="cover-wrapper" id="coverWrapper">
-        <img src="cover_2.jpg" alt="Тёмный Район" class="cover-image">
+        <img src="cover_2.jpg" alt="Тёмный Район" class="cover-image" id="coverImage">
         <canvas id="equalizer-overlay"></canvas>
         
         <div class="play-overlay" id="playOverlay">
@@ -476,7 +481,7 @@
     <h1>ТЁМНЫЙ РАЙОН</h1>
     <div class="subtitle">// PROTOCOL_X_ZERO</div>
 
-    <!-- Кастомный плеер (ОДИН) -->
+    <!-- Кастомный плеер -->
     <div class="player-box">
         <div class="player-info">
             <div class="player-track-name">ТЁМНЫЙ РАЙОН</div>
@@ -490,14 +495,14 @@
         <div class="player-controls">
             <button class="ctrl-btn" id="rewindBtn">⏮</button>
             <button class="ctrl-btn play-btn" id="playBtn">▶</button>
-            <button class="ctrl-btn" id="forwardBtn"></button>
+            <button class="ctrl-btn" id="forwardBtn">⏭</button>
             <div class="volume-container">
                 <input type="range" class="volume-slider" id="volumeSlider" min="0" max="1" step="0.01" value="1">
             </div>
         </div>
     </div>
 
-    <!-- Аудио (ОДИН ТРЕК) -->
+    <!-- Аудио элемент -->
     <audio id="audioPlayer" preload="metadata">
         <source src="rayony_master.m4a" type="audio/mp4">
         <source src="rayony_master.mp3" type="audio/mpeg">
@@ -675,11 +680,12 @@
         return m + ':' + (sec < 10 ? '0' : '') + sec;
     }
 
-    // ОДИН ПЛЕЕР
+    // ПЛЕЕР
     const audio = document.getElementById('audioPlayer');
     const playBtn = document.getElementById('playBtn');
     const playOverlay = document.getElementById('playOverlay');
     const coverWrapper = document.getElementById('coverWrapper');
+    const coverImage = document.getElementById('coverImage');
     const rewindBtn = document.getElementById('rewindBtn');
     const forwardBtn = document.getElementById('forwardBtn');
     const progressBar = document.getElementById('progressBar');
@@ -690,6 +696,20 @@
     const statusBadge = document.getElementById('statusBadge');
 
     let audioContext, analyser, dataArray, isInit = false;
+
+    // Обработчик ошибки картинки - пробуем альтернативные имена
+    coverImage.addEventListener('error', function() {
+        const alternatives = ['cover_2.png', 'cover_2.jpeg', 'cover_2.JPG', 'cover.png', 'cover.jpg'];
+        let tried = 0;
+        function tryNext() {
+            if (tried < alternatives.length) {
+                this.src = alternatives[tried];
+                tried++;
+            }
+        }
+        this.addEventListener('error', tryNext);
+        tryNext.call(this);
+    });
 
     function initAudioContext() {
         if (isInit) return;
@@ -724,7 +744,7 @@
     playBtn.addEventListener('click', togglePlay);
 
     audio.addEventListener('play', () => {
-        playBtn.textContent = '⏸';
+        playBtn.textContent = '';
         playOverlay.classList.add('playing');
         statusBadge.textContent = 'PLAYING';
         statusBadge.classList.add('playing');
