@@ -80,21 +80,16 @@
         }
 
         .hero {
-            min-height: 650px;
-            display: grid;
-            grid-template-columns: 1fr 1.15fr;
-            overflow: hidden;
+            min-height: 500px;
+            display: flex;
+            align-items: center;
+            padding: 80px 6vw;
             border-bottom: 1px solid var(--line);
-            background: radial-gradient(circle at 72% 45%, #143243 0, #071017 45%, #050b10 75%);
+            background: radial-gradient(circle at 30% 50%, #143243 0%, #050b10 70%);
         }
 
         .hero-copy {
-            padding: 110px 6vw 70px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            position: relative;
-            z-index: 2;
+            max-width: 600px;
         }
 
         .eyebrow, .section-label {
@@ -102,23 +97,23 @@
             color: #76909b;
             letter-spacing: 0.2em;
             text-transform: uppercase;
+            margin-bottom: 20px;
         }
 
         .hero h1 {
             font-family: Oswald, sans-serif;
-            font-size: clamp(70px, 10vw, 150px);
-            line-height: 0.78;
-            margin: 25px 0 38px;
-            letter-spacing: -0.035em;
+            font-size: clamp(60px, 8vw, 120px);
+            line-height: 0.85;
+            margin: 20px 0 30px;
+            letter-spacing: -0.02em;
             text-shadow: 0 10px 40px #000;
         }
 
-        .hero h1 span { margin-left: 0.45em; }
-
         .lead {
-            font-size: 15px;
-            line-height: 1.8;
+            font-size: 16px;
+            line-height: 1.7;
             color: #c9d5da;
+            margin-bottom: 30px;
         }
 
         .play-main, .play {
@@ -127,69 +122,72 @@
             border: 1px solid #54707e;
             cursor: pointer;
             transition: all 0.3s;
+            font-family: inherit;
         }
 
         .play-main {
-            width: max-content;
-            margin-top: 28px;
-            padding: 15px 20px;
-            font-family: inherit;
+            padding: 16px 24px;
+            font-size: 13px;
             letter-spacing: 0.12em;
         }
-        .play-main:hover { border-color: var(--accent); }
-
-        .play-main span { display: inline-block; margin-right: 12px; }
-        .play-main small { margin-left: 25px; color: var(--muted); }
-
-        .hero-art {
-            min-height: 650px;
-            position: relative;
-            background: linear-gradient(135deg, #0a1628 0%, #143243 50%, #050b10 100%);
+        .play-main:hover { 
+            border-color: var(--accent);
+            box-shadow: 0 0 20px rgba(155, 220, 255, 0.3);
         }
+
+        .play-main span { margin-right: 12px; }
+        .play-main small { margin-left: 20px; color: var(--muted); }
 
         .track-grid {
             display: grid;
-            grid-template-columns: minmax(280px, 1fr) 1.7fr 0.8fr;
+            grid-template-columns: 1fr 1.5fr;
             border-bottom: 1px solid var(--line);
         }
 
         .track-grid > * {
-            padding: 42px;
+            padding: 50px;
             border-right: 1px solid var(--line);
         }
         .track-grid > *:last-child { border-right: 0; }
+
+        .cover-wrap {
+            position: relative;
+            margin-bottom: 30px;
+        }
 
         .cover {
             width: 100%;
             display: block;
             aspect-ratio: 1;
-            object-fit: cover;
-            filter: contrast(1.05);
+            object-fit: contain;
+            background: #000;
         }
 
-        .player { padding-top: 18px; }
-        .player-row { display: flex; align-items: center; gap: 13px; }
+        .player { padding-top: 20px; }
+        .player-row { display: flex; align-items: center; gap: 15px; margin-bottom: 20px; }
 
         .play {
-            width: 40px;
-            height: 40px;
+            width: 44px;
+            height: 44px;
             border-radius: 50%;
-            font-size: 13px;
+            font-size: 14px;
             display: flex;
             align-items: center;
             justify-content: center;
         }
-        .play:hover { border-color: var(--accent); }
+        .play:hover { 
+            border-color: var(--accent);
+            box-shadow: 0 0 15px rgba(155, 220, 255, 0.3);
+        }
 
-        .track-name { display: flex; flex-direction: column; gap: 5px; flex: 1; }
-        .track-name strong { font-family: Oswald, sans-serif; letter-spacing: 0.12em; }
-        .track-name span, .time { font-size: 9px; color: var(--muted); }
-        .time { white-space: nowrap; }
+        .track-name { display: flex; flex-direction: column; gap: 6px; flex: 1; }
+        .track-name strong { font-family: Oswald, sans-serif; font-size: 16px; letter-spacing: 0.12em; }
+        .track-name span, .time { font-size: 10px; color: var(--muted); }
 
         input[type=range] {
             width: 100%;
-            margin: 18px 0 8px;
-            accent-color: #c5e7f4;
+            margin: 20px 0 10px;
+            accent-color: var(--accent);
             cursor: pointer;
         }
 
@@ -197,145 +195,129 @@
             display: flex;
             justify-content: space-between;
             color: var(--muted);
-            font-size: 8px;
+            font-size: 9px;
             letter-spacing: 0.1em;
         }
 
-        .about h2, .structure h2, .concept h2, .visual h2 {
+        .about h2, .structure h2, .concept h2 {
             font-family: Oswald, sans-serif;
             text-transform: uppercase;
             letter-spacing: 0.01em;
         }
 
-        .about h2 { font-size: 43px; line-height: 0.95; margin: 22px 0; }
-        .about p { max-width: 700px; color: #aebec5; line-height: 1.9; font-size: 13px; }
+        .about h2 { font-size: 48px; line-height: 0.95; margin: 25px 0; }
+        .about p { color: #aebec5; line-height: 1.9; font-size: 14px; margin-bottom: 40px; }
 
         .meta {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 0;
-            margin-top: 35px;
             border-top: 1px solid var(--line);
+            margin-bottom: 40px;
         }
         .meta div {
-            padding: 15px 0;
+            padding: 18px 0;
             border-bottom: 1px solid var(--line);
             display: flex;
             justify-content: space-between;
-            gap: 10px;
         }
-        .meta span { font-size: 8px; color: var(--muted); }
-        .meta b { font-size: 9px; font-weight: 400; text-align: right; }
+        .meta span { font-size: 9px; color: var(--muted); letter-spacing: 0.1em; }
+        .meta b { font-size: 11px; font-weight: 500; }
 
-        .score-list { margin-top: 22px; }
+        .score-list { margin-top: 30px; }
         .score-list div {
             display: flex;
             justify-content: space-between;
-            padding: 12px 0;
+            padding: 14px 0;
             border-bottom: 1px solid var(--line);
-            font-size: 10px;
+            font-size: 11px;
         }
-        .score-list b { font-weight: 500; }
+        .score-list b { font-weight: 500; color: var(--accent); }
 
-        .score-total { display: flex; align-items: end; gap: 12px; margin-top: 25px; }
-        .score-total strong { font-family: Oswald, sans-serif; font-size: 68px; line-height: 0.8; }
-        .score-total span { font-size: 8px; color: var(--muted); line-height: 1.5; }
+        .score-total { 
+            display: flex; 
+            align-items: end; 
+            gap: 15px; 
+            margin-top: 30px;
+            padding-top: 25px;
+            border-top: 2px solid var(--line);
+        }
+        .score-total strong { font-family: Oswald, sans-serif; font-size: 72px; line-height: 0.8; color: var(--accent); }
+        .score-total span { font-size: 9px; color: var(--muted); line-height: 1.4; }
 
-        .structure { padding: 55px 4vw; border-bottom: 1px solid var(--line); }
-        .structure-head { display: flex; justify-content: space-between; align-items: end; gap: 30px; }
-        .structure h2 { font-size: 48px; margin: 20px 0 30px; }
-        .structure-head p { color: var(--muted); font-size: 10px; }
+        .structure { padding: 60px 4vw; border-bottom: 1px solid var(--line); }
+        .structure-head { margin-bottom: 40px; }
+        .structure h2 { font-size: 52px; margin: 20px 0 15px; }
+        .structure-head p { color: var(--muted); font-size: 11px; }
 
         .timeline { border-top: 1px solid var(--line); }
         .moment {
             width: 100%;
             display: grid;
-            grid-template-columns: 12px 135px 180px 1fr;
-            gap: 18px;
+            grid-template-columns: 12px 140px 200px 1fr;
+            gap: 20px;
             align-items: center;
             text-align: left;
             color: var(--text);
             background: none;
             border: 0;
             border-bottom: 1px solid var(--line);
-            padding: 14px 8px;
+            padding: 16px 10px;
             cursor: pointer;
             font-family: inherit;
             transition: background 0.3s;
         }
-        .moment:hover { background: #0a1922; }
-        .moment i { width: 4px; height: 28px; background: #7fb8d0; display: block; }
+        .moment:hover { background: rgba(155, 220, 255, 0.05); }
+        .moment i { width: 4px; height: 30px; background: var(--accent); display: block; }
         .moment:nth-child(3n) i { background: #9f8fd0; }
         .moment:nth-child(4n) i { background: #d48b92; }
-        .moment time, .moment span { font-size: 9px; color: var(--muted); }
-        .moment strong { font-size: 10px; letter-spacing: 0.1em; }
+        .moment time, .moment span { font-size: 10px; color: var(--muted); }
+        .moment strong { font-size: 11px; letter-spacing: 0.1em; }
 
         .concept {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            padding: 90px 8vw;
+            padding: 80px 6vw;
             border-bottom: 1px solid var(--line);
-            min-height: 430px;
-            align-items: center;
+            background: linear-gradient(135deg, #0a1628 0%, #050b10 100%);
         }
-        .concept h2 { font-size: 75px; line-height: 0.83; margin: 20px 0; }
-        .quote { max-width: 520px; border-left: 1px solid #6f8995; padding-left: 35px; }
-        .quote p { font-family: Oswald, sans-serif; font-size: 28px; line-height: 1.2; margin: 0 0 20px; }
-        .quote span { font-size: 9px; color: var(--muted); letter-spacing: 0.15em; }
-
-        .visual { display: grid; grid-template-columns: 1.4fr 1fr; min-height: 480px; }
-        .visual-image {
-            background: linear-gradient(135deg, #0a1628 0%, #143243 100%);
-            min-height: 480px;
+        .concept h2 { font-size: 80px; line-height: 0.85; margin: 25px 0; }
+        .quote { 
+            max-width: 600px; 
+            border-left: 2px solid var(--accent); 
+            padding-left: 30px;
+            margin-top: 40px;
         }
-        .visual-copy { padding: 65px; display: flex; flex-direction: column; justify-content: center; background: #071119; }
-        .visual h2 { font-size: 45px; margin: 20px 0; }
-        .visual p { font-size: 12px; color: #aebec5; line-height: 1.8; max-width: 450px; }
-
-        .palette { display: flex; gap: 9px; margin-top: 28px; }
-        .palette i { width: 30px; height: 30px; border: 1px solid #405965; border-radius: 50%; background: #071017; }
-        .palette i:nth-child(2) { background: #183342; }
-        .palette i:nth-child(3) { background: #7895a1; }
-        .palette i:nth-child(4) { background: #b35d62; }
-        .palette i:nth-child(5) { background: #e7ecee; }
+        .quote p { font-family: Oswald, sans-serif; font-size: 32px; line-height: 1.3; margin: 0 0 15px; }
+        .quote span { font-size: 10px; color: var(--muted); letter-spacing: 0.15em; }
 
         footer {
             display: flex;
             justify-content: space-between;
-            padding: 25px 4vw;
+            padding: 30px 4vw;
             color: #526a76;
-            font-size: 8px;
+            font-size: 9px;
             letter-spacing: 0.12em;
         }
 
         @media (max-width: 900px) {
             .topbar nav, .micro { display: none; }
-            .hero { grid-template-columns: 1fr; min-height: auto; }
-            .hero-copy { padding: 80px 8vw 40px; }
-            .hero-art { min-height: 400px; }
+            .hero { padding: 60px 6vw; }
             .track-grid { grid-template-columns: 1fr; }
-            .track-grid > * { border-right: 0; border-bottom: 1px solid var(--line); }
+            .track-grid > * { border-right: 0; border-bottom: 1px solid var(--line); padding: 35px; }
             .track-grid > *:last-child { border-bottom: 0; }
-            .structure-head { display: block; }
-            .moment { grid-template-columns: 10px 105px 1fr; }
+            .moment { grid-template-columns: 10px 110px 1fr; }
             .moment span { display: none; }
-            .concept, .visual { grid-template-columns: 1fr; }
-            .concept { padding: 65px 8vw; }
             .concept h2 { font-size: 60px; }
-            .visual-image { min-height: 330px; }
-            .visual-copy { padding: 55px 8vw; }
-            footer { gap: 20px; flex-wrap: wrap; }
+            footer { flex-wrap: wrap; gap: 15px; }
         }
 
         @media (max-width: 520px) {
-            .hero h1 { font-size: 68px; }
-            .hero h1 span { margin-left: 0.2em; }
-            .track-grid > * { padding: 28px; }
-            .about h2, .structure h2 { font-size: 36px; }
+            .hero h1 { font-size: 50px; }
+            .track-grid > * { padding: 25px; }
+            .about h2, .structure h2 { font-size: 38px; }
             .meta { grid-template-columns: 1fr; }
-            .moment { grid-template-columns: 8px 92px 1fr; }
-            .moment time { font-size: 8px; }
-            .moment strong { font-size: 9px; }
+            .moment { grid-template-columns: 8px 95px 1fr; }
+            .moment time { font-size: 9px; }
+            .moment strong { font-size: 10px; }
         }
     </style>
 </head>
@@ -355,18 +337,19 @@
     <section class="hero">
         <div class="hero-copy">
             <div class="eyebrow">СЫРОЕ / SINGLE / 2026</div>
-            <h1>ТЁМНЫЙ<br><span>РАЙОН</span></h1>
-            <p class="lead">Это не просто район.<br>Это состояние.</p>
+            <h1>ТЁМНЫЙ<br>РАЙОН</h1>
+            <p class="lead">Это не просто район. Это состояние.</p>
             <button class="play-main" id="heroPlay">
                 <span>▶</span> СЛУШАТЬ ТРЕК <small>2:54</small>
             </button>
         </div>
-        <div class="hero-art"></div>
     </section>
 
     <div class="track-grid" id="track">
         <div>
-            <img src="cover.png" alt="Обложка" class="cover">
+            <div class="cover-wrap">
+                <img src="cover.png" alt="Обложка" class="cover">
+            </div>
             <div class="player">
                 <div class="player-row">
                     <button class="play" id="playBtn">▶</button>
@@ -399,7 +382,7 @@
             </div>
 
             <div class="score-list">
-                <div class="section-label" style="margin-top:40px">02 / ОЦЕНКА</div>
+                <div class="section-label">02 / ОЦЕНКА</div>
                 <div><span>Идея</span><b>8.0</b></div>
                 <div><span>Атмосфера</span><b>8.5</b></div>
                 <div><span>Ритмическая основа</span><b>8.0</b></div>
@@ -412,26 +395,12 @@
                 <span>/ 10<br>КОМПОЗИЦИОННО</span>
             </div>
         </div>
-
-        <div class="visual">
-            <div class="visual-image"></div>
-            <div class="visual-copy">
-                <div class="section-label">05 / ВИЗУАЛ</div>
-                <h2>Industrial minimalism.</h2>
-                <p>Холодный синий свет, грубый бетон, дым и один человек в центре кадра. Визуал не объясняет трек — он оставляет его ощущение.</p>
-                <div class="palette">
-                    <i></i><i></i><i></i><i></i><i></i>
-                </div>
-            </div>
-        </div>
     </div>
 
     <section class="structure" id="structure">
         <div class="structure-head">
-            <div>
-                <div class="section-label">03 / ДРАМАТУРГИЯ</div>
-                <h2>2:54 — один маршрут.</h2>
-            </div>
+            <div class="section-label">03 / ДРАМАТУРГИЯ</div>
+            <h2>2:54 — один маршрут.</h2>
             <p>От входа в пространство до полной тишины.</p>
         </div>
         <div class="timeline">
@@ -451,10 +420,8 @@
     </section>
 
     <section class="concept" id="concept">
-        <div>
-            <div class="section-label">04 / КОНЦЕПТ</div>
-            <h2>Холод.<br>Бетон.<br>Дым.<br>Реальность.</h2>
-        </div>
+        <div class="section-label">04 / КОНЦЕПТ</div>
+        <h2>Холод.<br>Бетон.<br>Дым.<br>Реальность.</h2>
         <div class="quote">
             <p>«Тёмный Район» — это не точка на карте. Это то, что остаётся внутри.</p>
             <span>— СЫРОЕ</span>
