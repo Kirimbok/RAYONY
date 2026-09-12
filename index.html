@@ -8,6 +8,739 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
+:root{
+  --bg:#050b10;
+  --panel:#08131b;
+  --line:#1a303c;
+  --text:#e8eef1;
+  --muted:#7f949e;
+  --accent:#9bdcff;
+  --accent-glow:rgba(155,220,255,.3);
+  --purple:#9f8fd0;
+  --red:#d48b92;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family:'Roboto Mono',monospace;
+  letter-spacing:.02em;
+  overflow-x:hidden;
+}
+
+/* ШУМ */
+.noise{
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  opacity:.07;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.35'/%3E%3C/svg%3E");
+  z-index:10;
+}
+
+/* TOPBAR */
+.topbar{
+  height:78px;
+  border-bottom:1px solid var(--line);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 4vw;
+  position:sticky;
+  top:0;
+  background:rgba(5,11,16,.9);
+  backdrop-filter:blur(14px);
+  z-index:20;
+}
+.brand{
+  font-family:Oswald,sans-serif;
+  font-size:24px;
+  font-weight:700;
+  letter-spacing:.12em;
+  color:#fff;
+  text-decoration:none;
+}
+.topbar nav{display:flex;gap:34px}
+.topbar nav a{
+  color:var(--muted);
+  text-decoration:none;
+  font-size:11px;
+  letter-spacing:.16em;
+  transition:color .25s;
+}
+.topbar nav a.active,.topbar nav a:hover{color:#fff}
+.micro{
+  font-size:9px;
+  line-height:1.5;
+  color:var(--muted);
+  text-align:right;
+  letter-spacing:.13em;
+}
+
+/* HERO */
+.hero{
+  min-height:650px;
+  display:grid;
+  grid-template-columns:1fr 1.15fr;
+  overflow:hidden;
+  border-bottom:1px solid var(--line);
+  background:radial-gradient(circle at 72% 45%,#143243 0,#071017 45%,#050b10 75%);
+}
+.hero-copy{
+  padding:110px 6vw 70px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  position:relative;
+  z-index:2;
+}
+.eyebrow,.section-label{
+  font-size:10px;
+  color:#76909b;
+  letter-spacing:.2em;
+  text-transform:uppercase;
+}
+.hero h1{
+  font-family:Oswald,sans-serif;
+  font-size:clamp(70px,10vw,150px);
+  line-height:.78;
+  margin:25px 0 38px;
+  letter-spacing:-.035em;
+  text-shadow:0 10px 40px #000;
+}
+.hero h1 span{margin-left:.45em}
+.lead{
+  font-size:15px;
+  line-height:1.8;
+  color:#c9d5da;
+  margin-bottom:30px;
+}
+.play-main,.play{
+  background:transparent;
+  color:#fff;
+  border:1px solid #54707e;
+  cursor:pointer;
+  transition:all .3s;
+  font-family:inherit;
+}
+.play-main{
+  width:max-content;
+  margin-top:28px;
+  padding:15px 20px;
+  letter-spacing:.12em;
+}
+.play-main:hover,.play:hover{
+  border-color:var(--accent);
+  box-shadow:0 0 20px var(--accent-glow);
+}
+.play-main span{display:inline-block;margin-right:12px}
+.play-main small{margin-left:25px;color:var(--muted)}
+.hero-art{min-height:650px;position:relative}
+.hero-art img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  object-position:center;
+  display:block;
+  filter:saturate(.72) contrast(1.08);
+}
+
+/* TRACK GRID */
+.track-grid{
+  display:grid;
+  grid-template-columns:minmax(280px,1fr) 1.7fr .8fr;
+  border-bottom:1px solid var(--line);
+}
+.track-grid > *{
+  padding:42px;
+  border-right:1px solid var(--line);
+}
+.track-grid > *:last-child{border-right:0}
+.cover{
+  width:100%;
+  display:block;
+  aspect-ratio:1;
+  object-fit:cover;
+  filter:contrast(1.05);
+}
+
+/* ПЕРЕКЛЮЧАТЕЛЬ ТРЕКОВ */
+.track-switch{
+  display:flex;
+  gap:10px;
+  margin-bottom:20px;
+}
+.switch-btn{
+  background:transparent;
+  border:1px solid var(--line);
+  color:var(--muted);
+  padding:8px 16px;
+  font-family:inherit;
+  font-size:10px;
+  letter-spacing:.1em;
+  cursor:pointer;
+  transition:all .3s;
+  text-transform:uppercase;
+}
+.switch-btn:hover{
+  border-color:var(--accent);
+  color:var(--text);
+}
+.switch-btn.active{
+  border-color:var(--accent);
+  color:var(--accent);
+  box-shadow:0 0 10px var(--accent-glow);
+}
+
+/* PLAYER */
+.player{padding-top:18px}
+.player-row{display:flex;align-items:center;gap:13px;margin-bottom:20px}
+.play{
+  width:40px;
+  height:40px;
+  border-radius:50%;
+  font-size:13px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.track-name{display:flex;flex-direction:column;gap:5px;flex:1}
+.track-name strong{font-family:Oswald,sans-serif;letter-spacing:.12em}
+.track-name span,.time{font-size:9px;color:var(--muted)}
+.time{white-space:nowrap}
+input[type=range]{
+  width:100%;
+  margin:18px 0 8px;
+  accent-color:#c5e7f4;
+  cursor:pointer;
+}
+.player-foot{
+  display:flex;
+  justify-content:space-between;
+  color:var(--muted);
+  font-size:8px;
+  letter-spacing:.1em;
+}
+
+/* ABOUT */
+.about h2,.structure h2,.concept h2,.visual h2,.lyrics-section h2{
+  font-family:Oswald,sans-serif;
+  text-transform:uppercase;
+  letter-spacing:.01em;
+}
+.about h2{font-size:43px;line-height:.95;margin:22px 0}
+.about p{max-width:700px;color:#aebec5;line-height:1.9;font-size:13px}
+.meta{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:0;
+  margin-top:35px;
+  border-top:1px solid var(--line);
+}
+.meta div{
+  padding:15px 0;
+  border-bottom:1px solid var(--line);
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+}
+.meta span{font-size:8px;color:var(--muted)}
+.meta b{font-size:9px;font-weight:400;text-align:right}
+.score-list{margin-top:22px}
+.score-list div{
+  display:flex;
+  justify-content:space-between;
+  padding:12px 0;
+  border-bottom:1px solid var(--line);
+  font-size:10px;
+}
+.score-list b{font-weight:500}
+.score-total{
+  display:flex;
+  align-items:end;
+  gap:12px;
+  margin-top:25px;
+}
+.score-total strong{font-family:Oswald,sans-serif;font-size:68px;line-height:.8}
+.score-total span{font-size:8px;color:var(--muted);line-height:1.5}
+
+/* STRUCTURE */
+.structure{padding:55px 4vw;border-bottom:1px solid var(--line)}
+.structure-head{display:flex;justify-content:space-between;align-items:end;gap:30px}
+.structure h2{font-size:48px;margin:20px 0 30px}
+.structure-head p{color:var(--muted);font-size:10px}
+.timeline{border-top:1px solid var(--line)}
+.moment{
+  width:100%;
+  display:grid;
+  grid-template-columns:12px 135px 180px 1fr;
+  gap:18px;
+  align-items:center;
+  text-align:left;
+  color:var(--text);
+  background:none;
+  border:0;
+  border-bottom:1px solid var(--line);
+  padding:14px 8px;
+  cursor:pointer;
+  font-family:inherit;
+  transition:background .25s;
+}
+.moment:hover{background:#0a1922}
+.moment i{width:4px;height:28px;background:#7fb8d0;display:block}
+.moment:nth-child(3n) i{background:var(--purple)}
+.moment:nth-child(4n) i{background:var(--red)}
+.moment time,.moment span{font-size:9px;color:var(--muted)}
+.moment strong{font-size:10px;letter-spacing:.1em}
+
+/* CONCEPT */
+.concept{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  padding:90px 8vw;
+  border-bottom:1px solid var(--line);
+  min-height:430px;
+  align-items:center;
+}
+.concept h2{font-size:75px;line-height:.83;margin:20px 0}
+.quote{max-width:520px;border-left:1px solid #6f8995;padding-left:35px}
+.quote p{font-family:Oswald,sans-serif;font-size:28px;line-height:1.2;margin:0 0 20px}
+.quote span{font-size:9px;color:var(--muted);letter-spacing:.15em}
+
+/* VISUAL */
+.visual{display:grid;grid-template-columns:1.4fr 1fr;min-height:480px}
+.visual-image img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+  filter:saturate(.7) contrast(1.08);
+}
+.visual-copy{
+  padding:65px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  background:#071119;
+}
+.visual h2{font-size:45px;margin:20px 0}
+.visual p{font-size:12px;color:#aebec5;line-height:1.8;max-width:450px}
+.palette{display:flex;gap:9px;margin-top:28px}
+.palette i{
+  width:30px;height:30px;
+  border:1px solid #405965;
+  border-radius:50%;
+  background:#071017;
+}
+.palette i:nth-child(2){background:#183342}
+.palette i:nth-child(3){background:#7895a1}
+.palette i:nth-child(4){background:#b35d62}
+.palette i:nth-child(5){background:#e7ecee}
+
+/* LYRICS */
+.lyrics-section{
+  padding:80px 4vw;
+  border-bottom:1px solid var(--line);
+  background:linear-gradient(180deg,#050b10 0%,#08131b 100%);
+}
+.lyrics-container{max-width:900px;margin:0 auto}
+.lyrics-section h2{font-size:48px;margin:20px 0 40px}
+.lyrics-content{font-size:14px;line-height:2}
+.verse-block{
+  margin-bottom:35px;
+  padding-left:20px;
+  border-left:2px solid var(--line);
+  transition:border-color .3s;
+}
+.verse-block:hover{border-left-color:var(--accent)}
+.verse-label{
+  font-size:10px;
+  color:var(--accent);
+  letter-spacing:.2em;
+  margin-bottom:15px;
+  font-weight:500;
+}
+.lyric-line{
+  color:#9fb0b8;
+  margin-bottom:5px;
+  transition:color .3s;
+}
+.lyric-line:hover{color:var(--text)}
+.chorus .lyric-line{color:var(--text);font-weight:500}
+.adlib{color:var(--muted);font-style:italic;opacity:.7}
+
+/* FOOTER */
+footer{
+  display:flex;
+  justify-content:space-between;
+  padding:25px 4vw;
+  color:#526a76;
+  font-size:8px;
+  letter-spacing:.12em;
+}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+  .topbar nav,.micro{display:none}
+  .hero{grid-template-columns:1fr;min-height:auto}
+  .hero-copy{padding:80px 8vw 40px}
+  .hero-art{min-height:auto;height:auto}
+  .hero-art img{aspect-ratio:16/10}
+  .track-grid{grid-template-columns:1fr}
+  .track-grid > *{border-right:0;border-bottom:1px solid var(--line)}
+  .track-grid > *:last-child{border-bottom:0}
+  .structure-head{display:block}
+  .moment{grid-template-columns:10px 105px 1fr}
+  .moment span{display:none}
+  .concept,.visual{grid-template-columns:1fr}
+  .concept{padding:65px 8vw}
+  .concept h2{font-size:60px}
+  .visual-image{height:330px}
+  .visual-copy{padding:55px 8vw}
+  footer{gap:20px;flex-wrap:wrap}
+}
+@media(max-width:520px){
+  .hero h1{font-size:68px}
+  .hero h1 span{margin-left:.2em}
+  .track-grid > *{padding:28px}
+  .about h2,.structure h2{font-size:36px}
+  .meta{grid-template-columns:1fr}
+  .moment{grid-template-columns:8px 92px 1fr}
+  .moment time{font-size:8px}
+  .moment strong{font-size:9px}
+  .lyrics-section h2{font-size:36px}
+  .lyrics-content{font-size:13px}
+}
+</style>
+</head>
+<body>
+<div class="noise"></div>
+
+<!-- HEADER -->
+<header class="topbar">
+  <a href="#top" class="brand">СЫРОЕ</a>
+  <nav>
+    <a href="#track" class="active">ТРЕК</a>
+    <a href="#structure">СТРУКТУРА</a>
+    <a href="#concept">КОНЦЕПТ</a>
+  </nav>
+  <div class="micro">МУЗЫКА<br>КОТОРАЯ РОЖДАЕТСЯ<br>ИЗ ЖИЗНИ</div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-copy">
+    <div class="eyebrow">СЫРОЕ / SINGLE / 2026</div>
+    <h1>ТЁМНЫЙ<br><span>РАЙОН</span></h1>
+    <p class="lead">Это не просто район.<br>Это состояние.</p>
+    <button class="play-main" id="heroPlay">
+      <span>▶</span> СЛУШАТЬ ТРЕК <small>2:54</small>
+    </button>
+  </div>
+  <div class="hero-art">
+    <img src="cover.jpg" alt="Тёмный Район">
+  </div>
+</section>
+
+<!-- TRACK GRID -->
+<div class="track-grid" id="track">
+
+  <!-- COLUMN 1: PLAYER -->
+  <div>
+    <img src="cover.jpg" alt="Обложка" class="cover">
+    <div class="player">
+
+      <!-- ПЕРЕКЛЮЧАТЕЛЬ -->
+      <div class="track-switch">
+        <button class="switch-btn active" data-src="rayony_master.m4a">ОРИГИНАЛ</button>
+        <button class="switch-btn" data-src="instrumental.m4a">ИНСТРУМЕНТАЛ</button>
+      </div>
+
+      <div class="player-row">
+        <button class="play" id="playBtn">▶</button>
+        <div class="track-name">
+          <strong>ТЁМНЫЙ РАЙОН</strong>
+          <span>СЫРОЕ · 2:54</span>
+        </div>
+        <div class="time" id="status">ГОТОВ</div>
+      </div>
+      <input type="range" id="seek" min="0" max="174" value="0" step="0.1">
+      <div class="player-foot">
+        <span id="time">0:00 / 2:54</span>
+        <span>148 BPM · E MINOR</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- COLUMN 2: ABOUT -->
+  <div class="about">
+    <div class="section-label">01 / О ТРЕКЕ</div>
+    <h2>Тёмный район —<br>не место на карте.</h2>
+    <p>
+      Это музыкальная история о пространстве, в котором бетон, дым,
+      улицы и внутреннее напряжение становятся одним состоянием.
+      Трек держится на холодной атмосфере, тяжёлом half-time ощущении
+      и постепенном наращивании напряжения.
+    </p>
+
+    <div class="meta">
+      <div><span>ЖАНР</span><b>Хип-хоп / Рэп</b></div>
+      <div><span>ТЕМП</span><b>148 BPM</b></div>
+      <div><span>ОЩУЩЕНИЕ</span><b>≈ 74 BPM</b></div>
+      <div><span>ТОНАЛЬНОСТЬ</span><b>E minor</b></div>
+      <div><span>ДЛИТЕЛЬНОСТЬ</span><b>2:54</b></div>
+      <div><span>ЭСТЕТИКА</span><b>Dark / Industrial</b></div>
+    </div>
+
+    <div class="score-list">
+      <div class="section-label">02 / ОЦЕНКА</div>
+      <div><span>Идея</span><b>8.0</b></div>
+      <div><span>Атмосфера</span><b>8.5</b></div>
+      <div><span>Ритмическая основа</span><b>8.0</b></div>
+      <div><span>Драматургия</span><b>7.5</b></div>
+      <div><span>Цельность</span><b>8.0</b></div>
+      <div><span>Потенциал</span><b>8.0</b></div>
+    </div>
+    <div class="score-total">
+      <strong>8.0</strong>
+      <span>/ 10<br>КОМПОЗИЦИОННО</span>
+    </div>
+  </div>
+
+  <!-- COLUMN 3: VISUAL -->
+  <div class="visual">
+    <div class="visual-image">
+      <img src="visual.jpg" alt="Визуал">
+    </div>
+    <div class="visual-copy">
+      <div class="section-label">05 / ВИЗУАЛ</div>
+      <h2>Industrial minimalism.</h2>
+      <p>Холодный синий свет, грубый бетон, дым и один человек в центре кадра. Визуал не объясняет трек — он оставляет его ощущение.</p>
+      <div class="palette">
+        <i></i><i></i><i></i><i></i><i></i>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- STRUCTURE -->
+<section class="structure" id="structure">
+  <div class="structure-head">
+    <div>
+      <div class="section-label">03 / ДРАМАТУРГИЯ</div>
+      <h2>2:54 — один маршрут.</h2>
+    </div>
+    <p>От входа в пространство до полной тишины.</p>
+  </div>
+  <div class="timeline">
+    <button class="moment" data-time="0"><i></i><time>00:00 — 00:12</time><strong>ИНТРО</strong><span>Вход в пространство.</span></button>
+    <button class="moment" data-time="12"><i></i><time>00:12 — 00:24</time><strong>НАПРЯЖЕНИЕ</strong><span>Ожидание основного входа.</span></button>
+    <button class="moment" data-time="24"><i></i><time>00:24 — 00:50</time><strong>КУПЛЕТ 1</strong><span>Основной ритмический блок.</span></button>
+    <button class="moment" data-time="50"><i></i><time>00:50 — 01:14</time><strong>ХУК / ПРИПЕВ</strong><span>Музыка становится шире.</span></button>
+    <button class="moment" data-time="74"><i></i><time>01:14 — 01:29</time><strong>ПЕРЕХОД</strong><span>Возврат в тень.</span></button>
+    <button class="moment" data-time="89"><i></i><time>01:29 — 01:40</time><strong>ПРОВАЛ / ПАУЗА</strong><span>Воздух перед ударом.</span></button>
+    <button class="moment" data-time="100"><i></i><time>01:40 — 01:59</time><strong>КУЛЬМИНАЦИЯ</strong><span>Максимальное напряжение.</span></button>
+    <button class="moment" data-time="119"><i></i><time>01:59 — 02:09</time><strong>СБРОС</strong><span>Контраст после пика.</span></button>
+    <button class="moment" data-time="129"><i></i><time>02:09 — 02:23</time><strong>ВТОРОЙ ПОДЪЁМ</strong><span>Последняя волна.</span></button>
+    <button class="moment" data-time="143"><i></i><time>02:23 — 02:38</time><strong>ФИНАЛЬНЫЙ БЛОК</strong><span>Движение к выходу.</span></button>
+    <button class="moment" data-time="158"><i></i><time>02:38 — 02:51</time><strong>СПАД</strong><span>Уход и затухание.</span></button>
+    <button class="moment" data-time="171"><i></i><time>02:51 — 02:54</time><strong>КОНЕЦ</strong><span>Тишина.</span></button>
+  </div>
+</section>
+
+<!-- CONCEPT -->
+<section class="concept" id="concept">
+  <div>
+    <div class="section-label">04 / КОНЦЕПТ</div>
+    <h2>Холод.<br>Бетон.<br>Дым.<br>Реальность.</h2>
+  </div>
+  <div class="quote">
+    <p>«Тёмный Район» — это не точка на карте. Это то, что остаётся внутри.</p>
+    <span>— СЫРОЕ</span>
+  </div>
+</section>
+
+<!-- LYRICS -->
+<section class="lyrics-section" id="lyrics">
+  <div class="lyrics-container">
+    <div class="section-label">06 / ТЕКСТ ПЕСНИ</div>
+    <h2>Слова</h2>
+    <div class="lyrics-content">
+
+      <div class="verse-block">
+        <div class="verse-label">[ИНТРО]</div>
+        <div class="lyric-line">В тени бетонных стен...</div>
+      </div>
+
+      <div class="verse-block">
+        <div class="verse-label">[КУПЛЕТ 1]</div>
+        <div class="lyric-line">В тени бетонных стен, где свет не достаёт,</div>
+        <div class="lyric-line">Тут каждый второй знает, как судьба бьёт.</div>
+        <div class="lyric-line">Дым сигарет вперемешку с туманом,</div>
+        <div class="lyric-line">Мы идём по краю, сыты обманом.</div>
+        <div class="lyric-line">Холод по венам, взгляд ледяной,</div>
+        <div class="lyric-line">Этот город забрал мой покой.</div>
+        <div class="lyric-line">Скрежет металла, эхо шагов,</div>
+        <div class="lyric-line">Здесь выживает лишь тот, кто готов.</div>
+        <div class="lyric-line">Крутятся колёса, время бежит,</div>
+        <div class="lyric-line">Но мой район всё так же молчит.</div>
+        <div class="lyric-line">Чувствуешь дрожь — это бас или страх?</div>
+        <div class="lyric-line">Вся наша жизнь — это пыль на руках.</div>
+        <div class="lyric-line">Сгущаются тучи, пора делать ход,</div>
+        <div class="lyric-line">Смотри, как эта тьма идёт!</div>
+      </div>
+
+      <div class="verse-block chorus">
+        <div class="verse-label">[ПРИПЕВ]</div>
+        <div class="lyric-line">Это тёмный район, тут свои законы,</div>
+        <div class="lyric-line">Каждый шаг — риск, мимо летят патроны.</div>
+        <div class="lyric-line">Мы не просим пощады, мы берём своё,</div>
+        <div class="lyric-line">Тьма укрывает нас — это наше бытиё.</div>
+        <div class="lyric-line" style="opacity:.5;margin-top:10px;">(x2)</div>
+      </div>
+
+      <div class="verse-block">
+        <div class="verse-label">[КУПЛЕТ 2]</div>
+        <div class="lyric-line">Фонари горят тускло, как чьи-то надежды,</div>
+        <div class="lyric-line">Мы прячем глаза под капюшоны одежды.</div>
+        <div class="lyric-line">Тут фальшь не прощают, тут видят насквозь,</div>
+        <div class="lyric-line">Столько судеб разбилось, столько жизней врозь.</div>
+        <div class="lyric-line">Но мы держим строй, мы стоим до конца,</div>
+        <div class="lyric-line">Нет страха в глазах, нет дрожи с лица.</div>
+        <div class="lyric-line">Это дым и закон, наш вечный туман,</div>
+        <div class="lyric-line">Город грехов и сплошной обман.</div>
+        <div class="lyric-line">Слышишь этот шёпот? Он зовёт нас во тьму,</div>
+        <div class="lyric-line">Я не верю словам, я не верю ничему.</div>
+        <div class="lyric-line">Только то, что внутри, только то, что моё,</div>
+        <div class="lyric-line">Скоро этот огонь поглотит всё!</div>
+      </div>
+
+      <div class="verse-block">
+        <div class="verse-label">[АУТРО]</div>
+        <div class="lyric-line">Мы не просим пощады, мы берём своё,</div>
+        <div class="lyric-line">Тьма укрывает нас — это наше бытиё.</div>
+        <div class="lyric-line adlib" style="margin-top:15px;">(Свой район...)</div>
+        <div class="lyric-line adlib">(Холод...)</div>
+        <div class="lyric-line adlib">(Система сломана...)</div>
+        <div class="lyric-line adlib">(Тёмный район...)</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div>СЫРОЕ © 2026</div>
+  <div>ТЁМНЫЙ РАЙОН · 2:54</div>
+  <div>ТЕКСТ → БИТ → ЗАПИСЬ → СЦЕНА</div>
+</footer>
+
+<!-- AUDIO -->
+<audio id="audio" src="rayony_master.m4a" preload="metadata"></audio>
+
+<script>
+const audio=document.getElementById('audio');
+const playBtn=document.getElementById('playBtn');
+const heroPlay=document.getElementById('heroPlay');
+const seek=document.getElementById('seek');
+const timeEl=document.getElementById('time');
+const status=document.getElementById('status');
+const moments=[...document.querySelectorAll('.moment')];
+const switchBtns=document.querySelectorAll('.switch-btn');
+
+function fmt(s){
+  if(!Number.isFinite(s))return '0:00';
+  const m=Math.floor(s/60);
+  const sec=Math.floor(s%60).toString().padStart(2,'0');
+  return `${m}:${sec}`;
+}
+
+function toggle(){
+  audio.paused?audio.play():audio.pause();
+}
+
+function paint(){
+  const cur=audio.currentTime||0;
+  const dur=audio.duration||174;
+  seek.max=dur;
+  seek.value=cur;
+  timeEl.textContent=`${fmt(cur)} / ${fmt(dur)}`;
+  status.textContent=audio.paused?'ПАУЗА':'ИГРАЕТ';
+}
+
+playBtn.addEventListener('click',toggle);
+
+heroPlay.addEventListener('click',()=>{
+  audio.play();
+  document.getElementById('track').scrollIntoView({behavior:'smooth'});
+});
+
+audio.addEventListener('play',()=>{
+  playBtn.textContent='Ⅱ';
+  status.textContent='ИГРАЕТ';
+});
+
+audio.addEventListener('pause',()=>{
+  playBtn.textContent='▶';
+  status.textContent='ПАУЗА';
+});
+
+audio.addEventListener('ended',()=>{
+  playBtn.textContent='▶';
+  status.textContent='ГОТОВ';
+});
+
+audio.addEventListener('timeupdate',paint);
+audio.addEventListener('loadedmetadata',paint);
+
+seek.addEventListener('input',()=>{
+  audio.currentTime=Number(seek.value);
+  paint();
+});
+
+moments.forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    audio.currentTime=Number(btn.dataset.time);
+    audio.play();
+  });
+});
+
+document.addEventListener('keydown',e=>{
+  if(e.code==='Space' && !['INPUT','TEXTAREA'].includes(document.activeElement.tagName)){
+    e.preventDefault();
+    toggle();
+  }
+});
+
+// ПЕРЕКЛЮЧЕНИЕ ОРИГИНАЛ / ИНСТРУМЕНТАЛ
+switchBtns.forEach(btn=>{
+  btn.addEventListener('click',(e)=>{
+    switchBtns.forEach(b=>b.classList.remove('active'));
+    e.target.classList.add('active');
+    const newSrc=e.target.getAttribute('data-src');
+    const wasPlaying=!audio.paused;
+    audio.src=newSrc;
+    audio.load();
+    audio.addEventListener('loadedmetadata',()=>{
+      if(wasPlaying)audio.play();
+    },{once:true});
+  });
+});
+</script>
+</body>
+</html><!DOCTYPE html>
+<html lang="ru" id="top">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ТЁМНЫЙ РАЙОН — СЫРОЕ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
 :root{--bg:#050b10;--panel:#08131b;--line:#1a303c;--text:#e8eef1;--muted:#7f949e;--accent:#9bdcff;--accent-glow:rgba(155,220,255,.3)}
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
