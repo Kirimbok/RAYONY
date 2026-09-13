@@ -8,8 +8,6 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Roboto+Mono:wght@400;500&display=swap');
-
 :root{
   --bg:#050b10;
   --panel:#08131b;
@@ -17,7 +15,8 @@
   --text:#e8eef1;
   --muted:#7f949e;
   --accent:#9bdcff;
-  --accent-glow:rgba(155,220,255,.3);
+  --accent-glow:rgba(155,220,255,0.3);
+  --gold:#d4af37;
 }
 
 *{box-sizing:border-box;margin:0;padding:0}
@@ -84,11 +83,11 @@ body{
   letter-spacing:.13em;
 }
 
-/* HERO СЕКЦИЯ */
+/* HERO С ОБЛОЖКОЙ */
 .hero{
   min-height:100vh;
   display:grid;
-  grid-template-columns:1.3fr 1fr;
+  grid-template-columns:1.2fr 1fr;
   align-items:center;
   padding:60px 4vw;
   gap:60px;
@@ -127,7 +126,7 @@ body{
   margin-bottom:30px;
 }
 
-.play-main,.play{
+.play-main,.play,.switch-btn{
   background:transparent;
   color:#fff;
   border:1px solid #54707e;
@@ -143,7 +142,7 @@ body{
   letter-spacing:.12em;
 }
 
-.play-main:hover,.play:hover{
+.play-main:hover,.play:hover,.switch-btn:hover{
   border-color:var(--accent);
   box-shadow:0 0 20px var(--accent-glow);
 }
@@ -151,7 +150,7 @@ body{
 .play-main span{display:inline-block;margin-right:12px}
 .play-main small{margin-left:25px;color:var(--muted)}
 
-/* ОГРОМНАЯ ОБЛОЖКА - НЕ ОБРЕЗАНА */
+/* ОГРОМНАЯ ОБЛОЖКА */
 .hero-art{
   min-height:80vh;
   display:flex;
@@ -192,6 +191,7 @@ body{
   object-fit:contain;
   filter:contrast(1.05);
   background:#000;
+  margin-bottom:30px;
 }
 
 /* ПЛЕЕР С ТОЛСТОЙ ПОЛОСОЙ */
@@ -235,11 +235,32 @@ body{
   color:var(--muted);
 }
 
+/* ПЕРЕКЛЮЧАТЕЛЬ ТРЕКОВ */
+.track-switch{
+  display:flex;
+  gap:10px;
+  margin-bottom:20px;
+}
+
+.switch-btn{
+  flex:1;
+  padding:12px 20px;
+  font-size:10px;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+}
+
+.switch-btn.active{
+  border-color:var(--accent);
+  background:rgba(155,220,255,.1);
+  box-shadow:0 0 15px var(--accent-glow);
+}
+
 /* ТОЛСТАЯ ПОЛОСА ПРОГРЕССА С ЭКВАЛАЙЗЕРОМ */
 .progress-container{
   position:relative;
   width:100%;
-  height:60px;
+  height:80px;
   background:var(--panel);
   border:1px solid var(--line);
   border-radius:8px;
@@ -340,6 +361,58 @@ body{
   font-size:9px;
   letter-spacing:.1em;
   margin-top:15px;
+}
+
+/* ТЕКСТ ПЕСНИ */
+.lyrics-container{
+  display:none;
+  margin-top:30px;
+  padding:30px;
+  background:rgba(8,19,27,.5);
+  border:1px solid var(--line);
+  border-radius:8px;
+  max-height:400px;
+  overflow-y:auto;
+}
+
+.lyrics-container.show{
+  display:block;
+  animation:fadeIn .5s ease;
+}
+
+@keyframes fadeIn{
+  from{opacity:0;transform:translateY(20px)}
+  to{opacity:1;transform:translateY(0)}
+}
+
+.lyrics-title{
+  font-family:Oswald,sans-serif;
+  font-size:24px;
+  color:var(--accent);
+  margin-bottom:20px;
+  text-align:center;
+  letter-spacing:.1em;
+}
+
+.lyric-line{
+  font-size:14px;
+  line-height:2.2;
+  color:#9fb0b8;
+  text-align:center;
+  padding:5px 0;
+  transition:all .3s;
+}
+
+.lyric-line:hover{
+  color:var(--text);
+  transform:translateX(10px);
+}
+
+.lyric-line.verse-label{
+  color:var(--gold);
+  font-weight:600;
+  margin-top:20px;
+  font-size:12px;
 }
 
 /* ABOUT */
@@ -526,12 +599,22 @@ body{
   min-height:480px;
 }
 
+.visual-image{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:radial-gradient(circle at 50% 50%,#143243 0%,#050b10 100%);
+  padding:40px;
+}
+
 .visual-image img{
-  width:100%;
-  height:100%;
-  object-fit:cover;
+  max-width:100%;
+  max-height:100%;
+  width:auto;
+  height:auto;
+  object-fit:contain;
   display:block;
-  filter:saturate(.7) contrast(1.08);
+  filter:drop-shadow(0 10px 30px rgba(0,0,0,.8));
 }
 
 .visual-copy{
@@ -612,10 +695,10 @@ footer{
   .concept,.visual{grid-template-columns:1fr}
   .concept{padding:65px 8vw}
   .concept h2{font-size:60px}
-  .visual-image{height:330px}
+  .visual-image{height:400px}
   .visual-copy{padding:55px 8vw}
   footer{gap:20px;flex-wrap:wrap}
-  .progress-container{height:50px}
+  .progress-container{height:60px}
 }
 
 @media(max-width:520px){
@@ -627,8 +710,9 @@ footer{
   .moment{grid-template-columns:8px 92px 1fr}
   .moment time{font-size:8px}
   .moment strong{font-size:9px}
-  .progress-container{height:45px}
+  .progress-container{height:50px}
   .volume-control{flex-wrap:wrap}
+  .track-switch{flex-direction:column}
 }
 </style>
 </head>
@@ -668,11 +752,17 @@ footer{
     <img src="cover.jpg" alt="Обложка" class="cover">
     
     <div class="player">
+      <!-- ПЕРЕКЛЮЧАТЕЛЬ -->
+      <div class="track-switch">
+        <button class="switch-btn active" data-src="temny_rayon.m4a" data-type="original">ОРИГИНАЛ</button>
+        <button class="switch-btn" data-src="instrumental.m4a" data-type="instrumental">ИНСТРУМЕНТАЛ</button>
+      </div>
+
       <div class="player-row">
         <button class="play" id="playBtn">▶</button>
         <div class="track-name">
-          <strong>ТЁМНЫЙ РАЙОН</strong>
-          <span>СЫРОЕ · 2:54</span>
+          <strong id="trackTitle">ТЁМНЫЙ РАЙОН</strong>
+          <span id="trackInfo">СЫРОЕ · 2:54</span>
         </div>
         <div class="time" id="status">ГОТОВ</div>
       </div>
@@ -693,7 +783,59 @@ footer{
 
       <div class="player-foot">
         <span>148 BPM · E MINOR</span>
-        <span>rayony_master.wav</span>
+        <span id="fileName">temny_rayon.m4a</span>
+      </div>
+
+      <!-- ТЕКСТ ПЕСНИ (показывается при инструментале) -->
+      <div class="lyrics-container" id="lyricsContainer">
+        <div class="lyrics-title">ТЕКСТ ПЕСНИ</div>
+        <div class="lyric-line verse-label">[ИНТРО]</div>
+        <div class="lyric-line">В тени бетонных стен...</div>
+        
+        <div class="lyric-line verse-label">[КУПЛЕТ 1]</div>
+        <div class="lyric-line">В тени бетонных стен, где свет не достаёт,</div>
+        <div class="lyric-line">Тут каждый второй знает, как судьба бьёт.</div>
+        <div class="lyric-line">Дым сигарет вперемешку с туманом,</div>
+        <div class="lyric-line">Мы идём по краю, сыты обманом.</div>
+        <div class="lyric-line">Холод по венам, взгляд ледяной,</div>
+        <div class="lyric-line">Этот город забрал мой покой.</div>
+        <div class="lyric-line">Скрежет металла, эхо шагов,</div>
+        <div class="lyric-line">Здесь выживает лишь тот, кто готов.</div>
+        <div class="lyric-line">Крутятся колёса, время бежит,</div>
+        <div class="lyric-line">Но мой район всё так же молчит.</div>
+        <div class="lyric-line">Чувствуешь дрожь — это бас или страх?</div>
+        <div class="lyric-line">Вся наша жизнь — это пыль на руках.</div>
+        <div class="lyric-line">Сгущаются тучи, пора делать ход,</div>
+        <div class="lyric-line">Смотри, как эта тьма идёт!</div>
+        
+        <div class="lyric-line verse-label">[ПРИПЕВ]</div>
+        <div class="lyric-line">Это тёмный район, тут свои законы,</div>
+        <div class="lyric-line">Каждый шаг — риск, мимо летят патроны.</div>
+        <div class="lyric-line">Мы не просим пощады, мы берём своё,</div>
+        <div class="lyric-line">Тьма укрывает нас — это наше бытиё.</div>
+        <div class="lyric-line" style="opacity:.5;margin-top:10px;">(x2)</div>
+        
+        <div class="lyric-line verse-label">[КУПЛЕТ 2]</div>
+        <div class="lyric-line">Фонари горят тускло, как чьи-то надежды,</div>
+        <div class="lyric-line">Мы прячем глаза под капюшоны одежды.</div>
+        <div class="lyric-line">Тут фальшь не прощают, тут видят насквозь,</div>
+        <div class="lyric-line">Столько судеб разбилось, столько жизней врозь.</div>
+        <div class="lyric-line">Но мы держим строй, мы стоим до конца,</div>
+        <div class="lyric-line">Нет страха в глазах, нет дрожи с лица.</div>
+        <div class="lyric-line">Это дым и закон, наш вечный туман,</div>
+        <div class="lyric-line">Город грехов и сплошной обман.</div>
+        <div class="lyric-line">Слышишь этот шёпот? Он зовёт нас во тьму,</div>
+        <div class="lyric-line">Я не верю словам, я не верю ничему.</div>
+        <div class="lyric-line">Только то, что внутри, только то, что моё,</div>
+        <div class="lyric-line">Скоро этот огонь поглотит всё!</div>
+        
+        <div class="lyric-line verse-label">[АУТРО]</div>
+        <div class="lyric-line">Мы не просим пощады, мы берём своё,</div>
+        <div class="lyric-line">Тьма укрывает нас — это наше бытиё.</div>
+        <div class="lyric-line" style="margin-top:15px;opacity:.7;">(Свой район...)</div>
+        <div class="lyric-line" style="opacity:.7;">(Холод...)</div>
+        <div class="lyric-line" style="opacity:.7;">(Система сломана...)</div>
+        <div class="lyric-line" style="opacity:.7;">(Тёмный район...)</div>
       </div>
     </div>
   </div>
@@ -772,6 +914,21 @@ footer{
   </div>
 </section>
 
+<!-- VISUAL С ЛОГОТИПОМ -->
+<section class="visual" id="visual">
+  <div class="visual-image">
+    <img src="temny_rayon_logo.png" alt="ТЁМНЫЙ РАЙОН Логотип" onerror="this.src='cover.jpg'">
+  </div>
+  <div class="visual-copy">
+    <div class="section-label">05 / ВИЗУАЛ</div>
+    <h2>Industrial minimalism.</h2>
+    <p>Холодный синий свет, грубый бетон, дым и один человек в центре кадра. Визуал не объясняет трек — он оставляет его ощущение.</p>
+    <div class="palette">
+      <i></i><i></i><i></i><i></i><i></i>
+    </div>
+  </div>
+</section>
+
 <!-- FOOTER -->
 <footer>
   <div>СЫРОЕ © 2026</div>
@@ -780,7 +937,7 @@ footer{
 </footer>
 
 <!-- AUDIO -->
-<audio id="audio" src="rayony_master.wav" preload="metadata"></audio>
+<audio id="audio" src="temny_rayon.m4a" preload="metadata"></audio>
 
 <script>
 const audio=document.getElementById('audio');
@@ -788,12 +945,17 @@ const playBtn=document.getElementById('playBtn');
 const heroPlay=document.getElementById('heroPlay');
 const timeDisplay=document.getElementById('timeDisplay');
 const status=document.getElementById('status');
+const trackTitle=document.getElementById('trackTitle');
+const trackInfo=document.getElementById('trackInfo');
+const fileName=document.getElementById('fileName');
 const moments=[...document.querySelectorAll('.moment')];
 const volumeSlider=document.getElementById('volumeSlider');
 const volumeValue=document.getElementById('volumeValue');
 const progressOverlay=document.getElementById('progressOverlay');
 const progressCanvas=document.getElementById('progressCanvas');
 const progressContainer=document.getElementById('progressContainer');
+const lyricsContainer=document.getElementById('lyricsContainer');
+const switchBtns=document.querySelectorAll('.switch-btn');
 const ctx=progressCanvas.getContext('2d');
 
 // Аудио контекст для визуализатора
@@ -894,6 +1056,40 @@ if(heroPlay){
   });
 }
 
+// Переключение треков
+switchBtns.forEach(btn=>{
+  btn.addEventListener('click',(e)=>{
+    // Сброс активных кнопок
+    switchBtns.forEach(b=>b.classList.remove('active'));
+    e.target.classList.add('active');
+    
+    const newSrc=e.target.getAttribute('data-src');
+    const type=e.target.getAttribute('data-type');
+    const wasPlaying=!audio.paused;
+    
+    // Показ/скрытие текста
+    if(type==='instrumental'){
+      lyricsContainer.classList.add('show');
+      trackTitle.textContent='ТЁМНЫЙ РАЙОН (ИНСТРУМЕНТАЛ)';
+      fileName.textContent='instrumental.m4a';
+    }else{
+      lyricsContainer.classList.remove('show');
+      trackTitle.textContent='ТЁМНЫЙ РАЙОН';
+      fileName.textContent='temny_rayon.m4a';
+    }
+    
+    // Смена трека
+    audio.src=newSrc;
+    audio.load();
+    
+    // Если играл — продолжаем
+    audio.addEventListener('loadedmetadata',()=>{
+      if(wasPlaying)audio.play();
+      paint();
+    },{once:true});
+  });
+});
+
 // События аудио
 audio.addEventListener('play',()=>{
   if(playBtn)playBtn.textContent='❚';
@@ -917,7 +1113,7 @@ audio.addEventListener('loadedmetadata',()=>{
   resizeCanvas();
 });
 
-// Клик по прогресс-бару для перемотки
+// Клик по прогресс-бару
 if(progressContainer){
   progressContainer.addEventListener('click',(e)=>{
     const rect=progressContainer.getBoundingClientRect();
@@ -934,7 +1130,6 @@ if(volumeSlider){
     if(volumeValue)volumeValue.textContent=Math.round(vol*100)+'%';
   });
   
-  // Установка начальной громкости
   audio.volume=Number(volumeSlider.value);
 }
 
