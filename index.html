@@ -16,7 +16,6 @@
   --muted:#7f949e;
   --accent:#9bdcff;
   --accent-glow:rgba(155,220,255,0.3);
-  --gold:#d4af37;
 }
 
 *{box-sizing:border-box;margin:0;padding:0}
@@ -31,7 +30,6 @@ body{
   overflow-x:hidden;
 }
 
-/* ШУМ */
 .noise{
   position:fixed;
   inset:0;
@@ -41,7 +39,6 @@ body{
   z-index:10;
 }
 
-/* TOPBAR */
 .topbar{
   height:78px;
   border-bottom:1px solid var(--line);
@@ -83,19 +80,39 @@ body{
   letter-spacing:.13em;
 }
 
-/* HERO С ОБЛОЖКОЙ */
+/* HERO СЕКЦИЯ */
 .hero{
-  min-height:100vh;
-  display:grid;
-  grid-template-columns:1.2fr 1fr;
-  align-items:center;
   padding:60px 4vw;
-  gap:60px;
   background:radial-gradient(circle at 30% 50%,#143243 0%,#050b10 70%);
   border-bottom:1px solid var(--line);
 }
 
-.hero-copy{
+/* ВЕРХНЯЯ ЧАСТЬ - ЛОГОТИП + ОПИСАНИЕ */
+.hero-top{
+  display:grid;
+  grid-template-columns:1fr 1.5fr;
+  gap:60px;
+  align-items:center;
+  margin-bottom:60px;
+}
+
+.logo-container{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:40px;
+  background:rgba(8,19,27,.5);
+  border:1px solid var(--line);
+  border-radius:8px;
+}
+
+.logo-container img{
+  max-width:100%;
+  height:auto;
+  filter:drop-shadow(0 10px 30px rgba(0,0,0,.8));
+}
+
+.hero-description{
   display:flex;
   flex-direction:column;
   justify-content:center;
@@ -106,166 +123,145 @@ body{
   color:#76909b;
   letter-spacing:.2em;
   text-transform:uppercase;
+  margin-bottom:20px;
 }
 
-.hero h1{
+.hero-description h1{
   font-family:Oswald,sans-serif;
-  font-size:clamp(70px,10vw,150px);
-  line-height:.78;
-  margin:25px 0 38px;
-  letter-spacing:-.035em;
+  font-size:clamp(50px,8vw,100px);
+  line-height:.85;
+  margin:20px 0;
+  letter-spacing:-.02em;
   text-shadow:0 10px 40px #000;
 }
 
-.hero h1 span{margin-left:.45em}
-
-.lead{
+.hero-description p{
   font-size:15px;
   line-height:1.8;
   color:#c9d5da;
-  margin-bottom:30px;
 }
 
-.play-main,.play,.switch-btn{
-  background:transparent;
-  color:#fff;
-  border:1px solid #54707e;
-  cursor:pointer;
-  transition:all .3s;
-  font-family:inherit;
+/* НИЖНЯЯ ЧАСТЬ - ОБЛОЖКА РАЙОНА + ПЛЕЕР */
+.hero-bottom{
+  display:grid;
+  grid-template-columns:1fr 1.2fr;
+  gap:60px;
+  align-items:center;
 }
 
-.play-main{
-  width:max-content;
-  margin-top:28px;
-  padding:15px 20px;
-  letter-spacing:.12em;
-}
-
-.play-main:hover,.play:hover,.switch-btn:hover{
-  border-color:var(--accent);
-  box-shadow:0 0 20px var(--accent-glow);
-}
-
-.play-main span{display:inline-block;margin-right:12px}
-.play-main small{margin-left:25px;color:var(--muted)}
-
-/* ОГРОМНАЯ ОБЛОЖКА */
-.hero-art{
-  min-height:80vh;
+.district-cover{
+  position:relative;
   display:flex;
   align-items:center;
   justify-content:center;
-  position:relative;
 }
 
-.hero-art img{
+.district-cover img{
   max-width:100%;
-  max-height:80vh;
+  max-height:70vh;
   width:auto;
   height:auto;
   object-fit:contain;
-  display:block;
   filter:contrast(1.05) saturate(.85);
   box-shadow:0 20px 60px rgba(0,0,0,.5);
 }
 
-/* TRACK GRID */
-.track-grid{
-  display:grid;
-  grid-template-columns:1fr 1.5fr;
-  border-bottom:1px solid var(--line);
-}
-
-.track-grid > *{
-  padding:50px;
-  border-right:1px solid var(--line);
-}
-
-.track-grid > *:last-child{border-right:0}
-
-.cover{
-  width:100%;
-  display:block;
-  aspect-ratio:auto;
-  object-fit:contain;
-  filter:contrast(1.05);
-  background:#000;
-  margin-bottom:30px;
-}
-
-/* ПЛЕЕР С ТОЛСТОЙ ПОЛОСОЙ */
+/* ПЛЕЕР */
 .player{
-  padding-top:30px;
+  padding:30px;
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:8px;
 }
 
-.player-row{
-  display:flex;
-  align-items:center;
-  gap:15px;
+.player-header{
   margin-bottom:25px;
 }
 
-.play{
-  width:50px;
-  height:50px;
-  border-radius:50%;
-  font-size:16px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  flex-shrink:0;
-}
-
-.track-name{
-  display:flex;
-  flex-direction:column;
-  gap:5px;
-  flex:1;
-}
-
-.track-name strong{
+.track-title{
   font-family:Oswald,sans-serif;
-  font-size:18px;
+  font-size:24px;
   letter-spacing:.12em;
+  margin-bottom:5px;
 }
 
-.track-name span{
+.track-meta{
   font-size:10px;
   color:var(--muted);
 }
 
-/* ПЕРЕКЛЮЧАТЕЛЬ ТРЕКОВ */
+/* ПЕРЕКЛЮЧАТЕЛЬ */
 .track-switch{
   display:flex;
   gap:10px;
-  margin-bottom:20px;
+  margin-bottom:25px;
 }
 
 .switch-btn{
   flex:1;
   padding:12px 20px;
+  background:transparent;
+  border:1px solid var(--line);
+  color:var(--muted);
+  font-family:inherit;
   font-size:10px;
   letter-spacing:.1em;
+  cursor:pointer;
+  transition:all .3s;
   text-transform:uppercase;
+}
+
+.switch-btn:hover{
+  border-color:var(--accent);
+  color:var(--text);
 }
 
 .switch-btn.active{
   border-color:var(--accent);
   background:rgba(155,220,255,.1);
+  color:var(--accent);
   box-shadow:0 0 15px var(--accent-glow);
 }
 
-/* ТОЛСТАЯ ПОЛОСА ПРОГРЕССА С ЭКВАЛАЙЗЕРОМ */
+/* КНОПКА PLAY С ЭКВАЛАЙЗЕРОМ */
+.play-container{
+  display:flex;
+  align-items:center;
+  gap:20px;
+  margin-bottom:25px;
+}
+
+.play-btn{
+  width:70px;
+  height:70px;
+  border-radius:50%;
+  background:transparent;
+  border:2px solid var(--accent);
+  color:var(--accent);
+  font-size:28px;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-shrink:0;
+  transition:all .3s;
+}
+
+.play-btn:hover{
+  transform:scale(1.1);
+  box-shadow:0 0 30px var(--accent-glow);
+}
+
+/* ТОЛСТАЯ ПОЛОСА С ЭКВАЛАЙЗЕРОМ */
 .progress-container{
+  flex:1;
   position:relative;
   width:100%;
   height:80px;
-  background:var(--panel);
+  background:var(--bg);
   border:1px solid var(--line);
   border-radius:8px;
   overflow:hidden;
-  margin:20px 0;
   cursor:pointer;
 }
 
@@ -308,7 +304,7 @@ body{
   gap:15px;
   margin-top:20px;
   padding:15px;
-  background:var(--panel);
+  background:var(--bg);
   border:1px solid var(--line);
   border-radius:8px;
 }
@@ -409,11 +405,25 @@ body{
 }
 
 .lyric-line.verse-label{
-  color:var(--gold);
+  color:#d4af37;
   font-weight:600;
   margin-top:20px;
   font-size:12px;
 }
+
+/* TRACK GRID */
+.track-grid{
+  display:grid;
+  grid-template-columns:1fr 1.5fr;
+  border-bottom:1px solid var(--line);
+}
+
+.track-grid > *{
+  padding:50px;
+  border-right:1px solid var(--line);
+}
+
+.track-grid > *:last-child{border-right:0}
 
 /* ABOUT */
 .about h2,.structure h2,.concept h2,.visual h2{
@@ -669,17 +679,18 @@ footer{
 /* RESPONSIVE */
 @media(max-width:900px){
   .topbar nav,.micro{display:none}
-  .hero{
+  .hero-top{
     grid-template-columns:1fr;
-    min-height:auto;
-    padding:60px 4vw;
     gap:40px;
   }
-  .hero-art{
-    min-height:50vh;
+  .hero-bottom{
+    grid-template-columns:1fr;
+    gap:40px;
+  }
+  .district-cover{
     order:-1;
   }
-  .hero-art img{
+  .district-cover img{
     max-height:50vh;
   }
   .track-grid{grid-template-columns:1fr}
@@ -702,8 +713,7 @@ footer{
 }
 
 @media(max-width:520px){
-  .hero h1{font-size:68px}
-  .hero h1 span{margin-left:.2em}
+  .hero-description h1{font-size:50px}
   .track-grid > *{padding:25px}
   .about h2,.structure h2{font-size:36px}
   .meta{grid-template-columns:1fr}
@@ -713,6 +723,11 @@ footer{
   .progress-container{height:50px}
   .volume-control{flex-wrap:wrap}
   .track-switch{flex-direction:column}
+  .play-container{flex-direction:column}
+  .play-btn{
+    width:90px;
+    height:90px;
+  }
 }
 </style>
 </head>
@@ -730,48 +745,47 @@ footer{
   <div class="micro">МУЗЫКА<br>КОТОРАЯ РОЖДАЕТСЯ<br>ИЗ ЖИЗНИ</div>
 </header>
 
-<!-- HERO -->
+<!-- HERO СЕКЦИЯ -->
 <section class="hero">
-  <div class="hero-copy">
-    <div class="eyebrow">СЫРОЕ / SINGLE / 2026</div>
-    <h1>ТЁМНЫЙ<br><span>РАЙОН</span></h1>
-    <p class="lead">Это не просто район.<br>Это состояние.</p>
-    <button class="play-main" id="heroPlay">
-      <span>▶</span> СЛУШАТЬ ТРЕК <small>2:54</small>
-    </button>
+  
+  <!-- ВЕРХ: ЛОГОТИП + ОПИСАНИЕ -->
+  <div class="hero-top">
+    <div class="logo-container">
+      <img src="temny_rayon_logo.png" alt="ТЁМНЫЙ РАЙОН Логотип" onerror="this.src='cover.jpg'">
+    </div>
+    <div class="hero-description">
+      <div class="eyebrow">СЫРОЕ / SINGLE / 2026</div>
+      <h1>ТЁМНЫЙ<br><span>РАЙОН</span></h1>
+      <p>Это не просто район.<br>Это состояние.<br><br>Музыкальная история о пространстве, в котором бетон, дым, улицы и внутреннее напряжение становятся одним состоянием.</p>
+    </div>
   </div>
-  <div class="hero-art">
-    <img src="cover.jpg" alt="Тёмный Район">
-  </div>
-</section>
 
-<!-- TRACK GRID -->
-<div class="track-grid" id="track">
-  <!-- COLUMN 1: PLAYER -->
-  <div>
-    <img src="cover.jpg" alt="Обложка" class="cover">
-    
+  <!-- НИЗ: ОБЛОЖКА РАЙОНА + ПЛЕЕР -->
+  <div class="hero-bottom">
+    <div class="district-cover">
+      <img src="cover.jpg" alt="Тёмный Район Обложка">
+    </div>
+
     <div class="player">
+      <div class="player-header">
+        <div class="track-title" id="trackTitle">ТЁМНЫЙ РАЙОН</div>
+        <div class="track-meta" id="trackMeta">СЫРОЕ · 2:54</div>
+      </div>
+
       <!-- ПЕРЕКЛЮЧАТЕЛЬ -->
       <div class="track-switch">
         <button class="switch-btn active" data-src="temny_rayon.m4a" data-type="original">ОРИГИНАЛ</button>
         <button class="switch-btn" data-src="instrumental.m4a" data-type="instrumental">ИНСТРУМЕНТАЛ</button>
       </div>
 
-      <div class="player-row">
-        <button class="play" id="playBtn">▶</button>
-        <div class="track-name">
-          <strong id="trackTitle">ТЁМНЫЙ РАЙОН</strong>
-          <span id="trackInfo">СЫРОЕ · 2:54</span>
+      <!-- КНОПКА PLAY + ЭКВАЛАЙЗЕР -->
+      <div class="play-container">
+        <button class="play-btn" id="playBtn">▶</button>
+        <div class="progress-container" id="progressContainer">
+          <canvas id="progressCanvas"></canvas>
+          <div class="progress-overlay" id="progressOverlay"></div>
+          <div class="time-display" id="timeDisplay">0:00 / 2:54</div>
         </div>
-        <div class="time" id="status">ГОТОВ</div>
-      </div>
-
-      <!-- ТОЛСТАЯ ПОЛОСА С ЭКВАЛАЙЗЕРОМ -->
-      <div class="progress-container" id="progressContainer">
-        <canvas id="progressCanvas"></canvas>
-        <div class="progress-overlay" id="progressOverlay"></div>
-        <div class="time-display" id="timeDisplay">0:00 / 2:54</div>
       </div>
 
       <!-- ФЕЙДЕР ГРОМКОСТИ -->
@@ -838,6 +852,14 @@ footer{
         <div class="lyric-line" style="opacity:.7;">(Тёмный район...)</div>
       </div>
     </div>
+  </div>
+</section>
+
+<!-- TRACK GRID -->
+<div class="track-grid" id="track">
+  <!-- COLUMN 1: COVER -->
+  <div>
+    <img src="cover.jpg" alt="Обложка" class="cover">
   </div>
 
   <!-- COLUMN 2: ABOUT -->
@@ -914,7 +936,7 @@ footer{
   </div>
 </section>
 
-<!-- VISUAL С ЛОГОТИПОМ -->
+<!-- VISUAL -->
 <section class="visual" id="visual">
   <div class="visual-image">
     <img src="temny_rayon_logo.png" alt="ТЁМНЫЙ РАЙОН Логотип" onerror="this.src='cover.jpg'">
@@ -942,13 +964,10 @@ footer{
 <script>
 const audio=document.getElementById('audio');
 const playBtn=document.getElementById('playBtn');
-const heroPlay=document.getElementById('heroPlay');
 const timeDisplay=document.getElementById('timeDisplay');
-const status=document.getElementById('status');
 const trackTitle=document.getElementById('trackTitle');
-const trackInfo=document.getElementById('trackInfo');
+const trackMeta=document.getElementById('trackMeta');
 const fileName=document.getElementById('fileName');
-const moments=[...document.querySelectorAll('.moment')];
 const volumeSlider=document.getElementById('volumeSlider');
 const volumeValue=document.getElementById('volumeValue');
 const progressOverlay=document.getElementById('progressOverlay');
@@ -958,10 +977,8 @@ const lyricsContainer=document.getElementById('lyricsContainer');
 const switchBtns=document.querySelectorAll('.switch-btn');
 const ctx=progressCanvas.getContext('2d');
 
-// Аудио контекст для визуализатора
 let audioContext,analyser,dataArray,source;
 
-// Инициализация визуализатора
 function initAudioContext(){
   if(!audioContext){
     audioContext=new(window.AudioContext||window.webkitAudioContext)();
@@ -976,7 +993,6 @@ function initAudioContext(){
   }
 }
 
-// Размер canvas
 function resizeCanvas(){
   if(progressCanvas&&progressContainer){
     progressCanvas.width=progressContainer.offsetWidth;
@@ -984,32 +1000,22 @@ function resizeCanvas(){
   }
 }
 
-// Рисование эквалайзера
 function drawVisualizer(){
   requestAnimationFrame(drawVisualizer);
-  
   if(!analyser||!dataArray)return;
-  
   analyser.getByteFrequencyData(dataArray);
-  
   const width=progressCanvas.width;
   const height=progressCanvas.height;
-  
   ctx.clearRect(0,0,width,height);
-  
   const barWidth=width/dataArray.length;
   let x=0;
-  
   for(let i=0;i<dataArray.length;i++){
     const barHeight=(dataArray[i]/255)*height;
-    
     const gradient=ctx.createLinearGradient(0,height-barHeight,0,height);
     gradient.addColorStop(0,'rgba(155,220,255,0.9)');
     gradient.addColorStop(1,'rgba(155,220,255,0.2)');
-    
     ctx.fillStyle=gradient;
     ctx.fillRect(x,height-barHeight,barWidth-1,barHeight);
-    
     x+=barWidth;
   }
 }
@@ -1030,44 +1036,20 @@ function toggle(){
 function paint(){
   const cur=audio.currentTime||0;
   const dur=audio.duration||174;
-  
-  // Обновление прогресс-бара
   const percent=(cur/dur)*100;
-  if(progressOverlay){
-    progressOverlay.style.width=percent+'%';
-  }
-  
-  if(timeDisplay){
-    timeDisplay.textContent=`${fmt(cur)} / ${fmt(dur)}`;
-  }
-  
-  if(status){
-    status.textContent=audio.paused?'ПАУЗА':'ИГРАЕТ';
-  }
+  if(progressOverlay)progressOverlay.style.width=percent+'%';
+  if(timeDisplay)timeDisplay.textContent=`${fmt(cur)} / ${fmt(dur)}`;
 }
 
-// Обработчики кнопок
 if(playBtn)playBtn.addEventListener('click',toggle);
 
-if(heroPlay){
-  heroPlay.addEventListener('click',()=>{
-    audio.play();
-    document.getElementById('track').scrollIntoView({behavior:'smooth'});
-  });
-}
-
-// Переключение треков
 switchBtns.forEach(btn=>{
   btn.addEventListener('click',(e)=>{
-    // Сброс активных кнопок
     switchBtns.forEach(b=>b.classList.remove('active'));
     e.target.classList.add('active');
-    
     const newSrc=e.target.getAttribute('data-src');
     const type=e.target.getAttribute('data-type');
     const wasPlaying=!audio.paused;
-    
-    // Показ/скрытие текста
     if(type==='instrumental'){
       lyricsContainer.classList.add('show');
       trackTitle.textContent='ТЁМНЫЙ РАЙОН (ИНСТРУМЕНТАЛ)';
@@ -1077,12 +1059,8 @@ switchBtns.forEach(btn=>{
       trackTitle.textContent='ТЁМНЫЙ РАЙОН';
       fileName.textContent='temny_rayon.m4a';
     }
-    
-    // Смена трека
     audio.src=newSrc;
     audio.load();
-    
-    // Если играл — продолжаем
     audio.addEventListener('loadedmetadata',()=>{
       if(wasPlaying)audio.play();
       paint();
@@ -1090,20 +1068,16 @@ switchBtns.forEach(btn=>{
   });
 });
 
-// События аудио
 audio.addEventListener('play',()=>{
   if(playBtn)playBtn.textContent='❚';
-  if(status)status.textContent='ИГРАЕТ';
 });
 
 audio.addEventListener('pause',()=>{
   if(playBtn)playBtn.textContent='▶';
-  if(status)status.textContent='ПАУЗА';
 });
 
 audio.addEventListener('ended',()=>{
   if(playBtn)playBtn.textContent='▶';
-  if(status)status.textContent='ГОТОВ';
   if(progressOverlay)progressOverlay.style.width='0%';
 });
 
@@ -1113,7 +1087,6 @@ audio.addEventListener('loadedmetadata',()=>{
   resizeCanvas();
 });
 
-// Клик по прогресс-бару
 if(progressContainer){
   progressContainer.addEventListener('click',(e)=>{
     const rect=progressContainer.getBoundingClientRect();
@@ -1122,26 +1095,15 @@ if(progressContainer){
   });
 }
 
-// Громкость
 if(volumeSlider){
   volumeSlider.addEventListener('input',(e)=>{
     const vol=Number(e.target.value);
     audio.volume=vol;
     if(volumeValue)volumeValue.textContent=Math.round(vol*100)+'%';
   });
-  
   audio.volume=Number(volumeSlider.value);
 }
 
-// Таймлайн
-moments.forEach(btn=>{
-  btn.addEventListener('click',()=>{
-    audio.currentTime=Number(btn.dataset.time);
-    audio.play();
-  });
-});
-
-// Клавиша пробел
 document.addEventListener('keydown',e=>{
   if(e.code==='Space'&&!['INPUT','TEXTAREA'].includes(document.activeElement.tagName)){
     e.preventDefault();
@@ -1149,7 +1111,6 @@ document.addEventListener('keydown',e=>{
   }
 });
 
-// Ресайз окна
 window.addEventListener('resize',resizeCanvas);
 </script>
 </body>
